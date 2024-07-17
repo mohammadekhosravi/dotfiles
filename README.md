@@ -9,7 +9,15 @@ This directory contains all of config files for replicating current system, mana
    above command would install stow. this utility create symbolic link between files that it's manage and home directory.
 
 ## Usage
+
+First, clone this repo.
+``` sh
+git clone git@github.com:mohammadekhosravi/dotfiles.git
+cd dotfiles
+```
+
+then use stow to create symlinks
+
 ``` sh
 stow .
 ```
-inside directory that you want to manage you dotfiles.
