@@ -12,14 +12,29 @@ This directory contains all of config files for replicating current system, mana
    ``` sh
    sudo pacman -S zsh
    ```
+
 3. alacritty
    ``` sh
    sudo pacman -S alacritty
    ```
+   
 4. Hack Nerd Font
    ``` sh
    sudo pacman -S ttf-hack-nerd
    ```
+5. fzf
+   ``` sh
+   sudo pacman -S fzf
+   ```
+
+   `for fuzzy finding history via zsh and other stuff`
+
+6. zoxide
+   ``` sh
+   sudo pacman -S zoxide
+   ```
+
+   for z command
 
 ## Usage
 
