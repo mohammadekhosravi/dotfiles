@@ -87,3 +87,4 @@ export NVM_DIR="$HOME/.nvm"
 
 # PATH
 [[ -d $HOME/.bin ]] && export PATH=$HOME/.bin:$PATH
+[[ -d $HOME/go ]] && export PATH=$HOME/go:$PATH
