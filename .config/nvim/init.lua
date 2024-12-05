@@ -1,13 +1,7 @@
 require("config.lazy")
+require("options")
 
--- small config
-vim.cmd "set number"
-vim.cmd "set expandtab"
-vim.cmd "set shiftwidth=2"
-vim.cmd "set tabstop=2"
-vim.cmd "set smartcase"
-vim.cmd "set smartindent"
-
+-- format go files when save a file
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = vim.api.nvim_create_augroup("formatGoCode", { clear = true }),
   pattern = "*.go",
