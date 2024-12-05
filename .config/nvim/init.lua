@@ -2,7 +2,6 @@ require("config.lazy")
 
 -- small config
 vim.cmd "set number"
-vim.cmd "colorscheme habamax"
 vim.cmd "set expandtab"
 vim.cmd "set shiftwidth=2"
 vim.cmd "set tabstop=2"
