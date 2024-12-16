@@ -20,6 +20,9 @@ return {
         live_grep = {
           theme = 'ivy',
         },
+        help_tags = {
+          theme = 'ivy',
+        },
       },
       extensions = {
         fzf = {},
