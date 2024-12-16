@@ -1,4 +1,5 @@
 require("config.lazy")
 require("config.yank_highlight")
+require("config.term")
 require("options")
 require("keymaps")
