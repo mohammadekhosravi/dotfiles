@@ -15,21 +15,22 @@
 
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
+local term_opts = { silent = true }
 
 -- Don't do anything when <space> is pressed
-keymap({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+keymap({ 'n', 'v' }, '<Space>', '<Nop>', term_opts)
 
 -- Windows Navigation
 -- See `:help windows` and/or `:help wincmd`
 -- There are a lot more usefull command with CTRL-w but we are remapping this because there are frequently used
-keymap("n", "<C-h>", "<C-w>h", { noremap = true, silent = true, desc = 'Navigate to left window' })
-keymap("n", "<C-j>", "<C-w>j", { noremap = true, silent = true, desc = 'Navigate to bottom window' })
-keymap("n", "<C-k>", "<C-w>k", { noremap = true, silent = true, desc = 'Navigate to top window' })
-keymap("n", "<C-l>", "<C-w>l", { noremap = true, silent = true, desc = 'Navigate to right window' })
+keymap("n", "<C-h>", "<C-w>h", vim.tbl_deep_extend("force", opts, { desc = 'Navigate to left window' }))
+keymap("n", "<C-j>", "<C-w>j", vim.tbl_deep_extend("force", opts, { desc = 'Navigate to bottom window' }))
+keymap("n", "<C-k>", "<C-w>k", vim.tbl_deep_extend("force", opts, { desc = 'Navigate to top window' }))
+keymap("n", "<C-l>", "<C-w>l", { desc = 'Navigate to right window' })
 
 -- Buffers Navigation
-keymap("n", "<S-l>", ":bnext<CR>", { noremap = true, silent = true, desc = 'Navigate to next buffer' })
-keymap("n", "<S-h>", ":bprevious<CR>", { noremap = true, silent = true, desc = 'Navigate to previous buffer' })
+keymap("n", "<S-l>", ":bnext<CR>", vim.tbl_deep_extend("force", opts, { desc = 'Navigate to next buffer' }))
+keymap("n", "<S-h>", ":bprevious<CR>", vim.tbl_deep_extend("force", opts, { desc = 'Navigate to previous buffer' }))
 
 -- Resize windows with CTRL + arrow keys
 keymap("n", "<C-Up>", ":resize +2<CR>", opts)
@@ -59,8 +60,9 @@ keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
 keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
 -- Quickfix List
-keymap('n', '<M-j>', '<cmd>cnext<cr>', { noremap = true, silent = true, desc = 'Go to next item in quickfix list' })
-keymap('n', '<M-k>', '<cmd>cprev<cr>', { noremap = true, silent = true, desc = 'Go to previous item in quickfix list' })
+keymap('n', '<M-j>', '<cmd>cnext<cr>', vim.tbl_deep_extend("force", opts, { desc = 'Go to next item in quickfix list' }))
+keymap('n', '<M-k>', '<cmd>cprev<cr>',
+  vim.tbl_deep_extend("force", opts, { desc = 'Go to previous item in quickfix list' }))
 
 -- Builtin Terminal
 keymap(
@@ -73,18 +75,13 @@ keymap(
     vim.api.nvim_win_set_height(0, 8)
     vim.cmd.normal('A')
   end,
-  { noremap = true, silent = true, desc = '' }
+  vim.tbl_deep_extend("force", opts, { desc = 'Open builtin termainal' })
 )
-keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", { desc = 'Navigate from terminal to left window', silent = true })
-keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", { desc = 'Navigate from terminal to buttom window', silent = true })
-keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", { desc = 'Navigate from terminal to top window', silent = true })
-keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", { desc = 'Navigate from terminal to right window', silent = true })
-
--- Telescope
-keymap('n', '<leader>sf', '<cmd>Telescope find_files<cr>', { desc = '[S]earch [F]iles' })
-keymap('n', '<leader>sh', '<cmd>Telescope help_tags<cr>', { desc = '[S]earch Neovim [H]elp' })
-keymap('n', '<leader>sg', '<cmd>Telescope live_grep<cr>', { desc = '[S]earch by [G]rep' })
-keymap('n', '<leader><space>', '<cmd>Telescope buffers<cr>', { desc = '[ ] Find existing buffers' })
--- TODO: make it search word under cursor
-keymap('n', '<leader>sw', '<cmd>Telescope grep_string<cr>', { desc = '[S]earch current [W]ord' })
-keymap('n', '<leader>sd', '<cmd>Telescope diagnostics<cr>', { desc = '[S]earch [D]iagnostics' })
+keymap("t", "<C-h>", "<C-\\><C-N><C-w>h",
+  vim.tbl_deep_extend("force", term_opts, { desc = 'Navigate from terminal to left window' }))
+keymap("t", "<C-j>", "<C-\\><C-N><C-w>j",
+  vim.tbl_deep_extend("force", term_opts, { desc = 'Navigate from terminal to bottom window' }))
+keymap("t", "<C-k>", "<C-\\><C-N><C-w>k",
+  vim.tbl_deep_extend("force", term_opts, { desc = 'Navigate from terminal to top window' }))
+keymap("t", "<C-l>", "<C-\\><C-N><C-w>l",
+  vim.tbl_deep_extend("force", term_opts, { desc = 'Navigate from terminal to right window' }))
