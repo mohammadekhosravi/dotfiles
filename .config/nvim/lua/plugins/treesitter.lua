@@ -3,8 +3,47 @@ return {
   build = ":TSUpdate",
   config = function()
     ---@diagnostic disable-next-line
-    require 'nvim-treesitter.configs'.setup {
-      ensure_installed = { "bash", "comment", "cpp", "css", "csv", "diff", "dockerfile", "gitcommit", "go", "goctl", "gomod", "gosum", "gotmpl", "gowork", "html", "htmldjango", "javascript", "jq", "jsdoc", "json", "json5", "make", "python", "typescript", "scss", "sql", "styled", "tsx", "xml", "xresources", "yaml", "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
+    require("nvim-treesitter.configs").setup({
+      ensure_installed = {
+        "bash",
+        "comment",
+        "cpp",
+        "css",
+        "csv",
+        "diff",
+        "dockerfile",
+        "gitcommit",
+        "go",
+        "goctl",
+        "gomod",
+        "gosum",
+        "gotmpl",
+        "gowork",
+        "html",
+        "htmldjango",
+        "javascript",
+        "jq",
+        "jsdoc",
+        "json",
+        "json5",
+        "make",
+        "python",
+        "typescript",
+        "scss",
+        "sql",
+        "styled",
+        "tsx",
+        "xml",
+        "xresources",
+        "yaml",
+        "c",
+        "lua",
+        "vim",
+        "vimdoc",
+        "query",
+        "markdown",
+        "markdown_inline",
+      },
       auto_install = false,
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
@@ -23,6 +62,6 @@ return {
         end,
         additional_vim_regex_highlighting = false,
       },
-    }
-  end
+    })
+  end,
 }

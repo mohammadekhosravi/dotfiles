@@ -44,3 +44,5 @@ end
 
 vim.cmd "set whichwrap+=<,>,[,],h,l"
 vim.cmd [[set iskeyword+=-]]
+-- disable virtual text
+vim.diagnostic.config({ virtual_text = false })

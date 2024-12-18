@@ -20,6 +20,7 @@ return {
 
     lspconfig['lua_ls'].setup({ capabilities = capabilities })
     lspconfig['gopls'].setup({ capabilities = capabilities })
+    lspconfig['ts_ls'].setup({ capabilities = capabilities })
 
     vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(args)
@@ -34,7 +35,7 @@ return {
             callback = function()
               vim.lsp.buf.format {
                 -- Never request typescript-language-server for formatting
-                filter = function(c) return c.name ~= "tsserver" end,
+                filter = function(c) return c.name ~= "tsserver" and c.name ~= "ts_ls" end,
                 bufnr = args.buf,
                 id = client.id,
               }
