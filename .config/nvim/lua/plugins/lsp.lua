@@ -11,11 +11,15 @@ return {
           { path = "${3rd}/luv/library", words = { "vim%.uv" } },
         },
       },
-    }
+    },
+    'saghen/blink.cmp',
   },
   config = function()
-    require('lspconfig').lua_ls.setup {}
-    require('lspconfig').gopls.setup {}
+    local capabilities = require('blink.cmp').get_lsp_capabilities()
+    local lspconfig = require('lspconfig')
+
+    lspconfig['lua_ls'].setup({ capabilities = capabilities })
+    lspconfig['gopls'].setup({ capabilities = capabilities })
 
     vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(args)
