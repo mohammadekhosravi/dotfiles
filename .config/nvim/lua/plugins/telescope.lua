@@ -9,7 +9,13 @@ return {
       cond = function()
         return vim.fn.executable 'make' == 1
       end,
-    }
+    },
+    {
+      "nvim-telescope/telescope-live-grep-args.nvim",
+      -- This will not install any breaking changes.
+      -- For major updates, this must be adjusted manually.
+      version = "^1.0.0",
+    },
   },
   config = function()
     local builtin = require("telescope.builtin")
@@ -48,12 +54,17 @@ return {
       },
       extensions = {
         fzf = {},
+        live_grep_args = {},
       }
     }
 
     -- To get fzf loaded and working with telescope, you need to call
     -- load_extension, somewhere after setup function:
     require('telescope').load_extension('fzf')
+
+    -- load live_grep_args extensions
+    require("telescope").load_extension("live_grep_args")
+
     -- load multigrep picker that we wrote
     require('config.multigrep').setup()
   end,
