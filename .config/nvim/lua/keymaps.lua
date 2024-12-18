@@ -77,6 +77,8 @@ keymap(
   end,
   vim.tbl_deep_extend("force", opts, { desc = 'Open builtin termainal' })
 )
+keymap("t", "<Esc><Esc>", "<C-\\><C-N>",
+  vim.tbl_deep_extend("force", term_opts, { desc = 'Navigate from terminal to left window' }))
 keymap("t", "<C-h>", "<C-\\><C-N><C-w>h",
   vim.tbl_deep_extend("force", term_opts, { desc = 'Navigate from terminal to left window' }))
 keymap("t", "<C-j>", "<C-\\><C-N><C-w>j",
@@ -85,3 +87,7 @@ keymap("t", "<C-k>", "<C-\\><C-N><C-w>k",
   vim.tbl_deep_extend("force", term_opts, { desc = 'Navigate from terminal to top window' }))
 keymap("t", "<C-l>", "<C-\\><C-N><C-w>l",
   vim.tbl_deep_extend("force", term_opts, { desc = 'Navigate from terminal to right window' }))
+
+-- execute config
+keymap("n", "<space><space>x", "<cmd>source %<CR>", { desc = 'Source current buffer' })
+keymap("v", "<space><space>x", ":lua<CR>", { desc = 'Source highlighted segment' })
