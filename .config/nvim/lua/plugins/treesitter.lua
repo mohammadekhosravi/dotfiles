@@ -1,6 +1,11 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
+  event = { "BufReadPre", "BufNewFile" },
+  dependencies = {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    "JoosepAlviste/nvim-ts-context-commentstring",
+  },
   config = function()
     ---@diagnostic disable-next-line
     require("nvim-treesitter.configs").setup({
@@ -49,6 +54,15 @@ return {
       sync_install = false,
       -- List of parsers to ignore installing (or "all")
       ignore_install = {},
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<C-space>",
+          node_incremental = "<C-space>",
+          scope_incremental = false,
+          node_decremental = "<bs>",
+        },
+      },
       highlight = {
         enable = true,
         -- disable = { "c", "rust" },
