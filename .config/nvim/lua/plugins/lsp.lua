@@ -48,5 +48,11 @@ return {
         end
       end,
     })
+
+    -- keybinds
+    -- default keybinds:
+    -- 1. `K` maps to `vim.lsp.buf.hover()` in Normal mode
+    -- 2. `[d` and `]d` map to `vim.diagnostic.goto_prev()` and `vim.diagnostic.goto_next()`, respectively.
+    -- 3. `<C-W>d` maps to `vim.diagnostic.open_float()`
   end,
 }
