@@ -1,6 +1,5 @@
 local options = {
   backup = false,                         -- creates a backup file
-  clipboard = "unnamedplus",              -- allows neovim to access the system clipboard
   cmdheight = 2,                          -- more space in the neovim command line for displaying messages
   completeopt = { "menuone", "noselect" }, -- mostly just for cmp
   conceallevel = 0,                       -- so that `` is visible in markdown files
@@ -37,6 +36,13 @@ local options = {
 }
 
 vim.opt.shortmess:append("c")
+
+-- Sync clipboard between OS and Neovim.
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+--  See `:help 'clipboard'`
+vim.schedule(function()
+  vim.opt.clipboard = "unnamedplus"
+end)
 
 for k, v in pairs(options) do
   vim.opt[k] = v
