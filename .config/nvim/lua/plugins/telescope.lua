@@ -1,13 +1,13 @@
 return {
-  'nvim-telescope/telescope.nvim',
-  tag = '0.1.8',
+  "nvim-telescope/telescope.nvim",
+  tag = "0.1.8",
   dependencies = {
-    { 'nvim-lua/plenary.nvim' },
+    { "nvim-lua/plenary.nvim" },
     {
-      'nvim-telescope/telescope-fzf-native.nvim',
-      build = 'make',
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
       cond = function()
-        return vim.fn.executable 'make' == 1
+        return vim.fn.executable("make") == 1
       end,
     },
     {
@@ -31,41 +31,41 @@ return {
     vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "Find Word under Cursor" })
     vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "Find Keymaps" })
 
-    require('telescope').setup {
+    require("telescope").setup({
       pickers = {
         find_files = {
-          theme = 'ivy',
+          theme = "ivy",
         },
         live_grep = {
-          theme = 'ivy',
+          theme = "ivy",
         },
         help_tags = {
-          theme = 'ivy',
+          theme = "ivy",
         },
         buffers = {
-          theme = 'ivy',
+          theme = "ivy",
         },
         grep_string = {
-          theme = 'ivy'
+          theme = "ivy",
         },
         keymaps = {
-          theme = 'ivy'
-        }
+          theme = "ivy",
+        },
       },
       extensions = {
         fzf = {},
         live_grep_args = {},
-      }
-    }
+      },
+    })
 
     -- To get fzf loaded and working with telescope, you need to call
     -- load_extension, somewhere after setup function:
-    require('telescope').load_extension('fzf')
+    require("telescope").load_extension("fzf")
 
     -- load live_grep_args extensions
     require("telescope").load_extension("live_grep_args")
 
     -- load multigrep picker that we wrote
-    require('config.multigrep').setup()
+    require("config.multigrep").setup()
   end,
 }

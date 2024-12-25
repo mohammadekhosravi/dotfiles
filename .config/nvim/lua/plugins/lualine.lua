@@ -49,46 +49,43 @@ vim.opt.laststatus = 3
 
 return {
   -- Set lualine as statusline
-  'nvim-lualine/lualine.nvim',
+  "nvim-lualine/lualine.nvim",
   -- See `:help lualine.txt`
-  opts = {
-  },
+  opts = {},
   config = function()
-    require("lualine").setup(
-      {
-        options = {
-          icons_enabled = true,
-          theme = "auto",
-          component_separators = { left = "", right = "" },
-          section_separators = { left = "", right = "" },
-          disabled_filetypes = { "dashboard", "NvimTree", "Outline" },
-          always_divide_middle = true,
-        },
-        sections = {
-          lualine_a = { branch },
-          lualine_b = { diagnostics },
-          lualine_c = {
-            {
-              'filename',
-              file_status = false, -- displays file status (readonly status, modified status)
-              path = 1             -- 0 = just filename, 1 = relative path, 2 = absolute path
-            }
+    require("lualine").setup({
+      options = {
+        icons_enabled = true,
+        theme = "auto",
+        component_separators = { left = "", right = "" },
+        section_separators = { left = "", right = "" },
+        disabled_filetypes = { "dashboard", "NvimTree", "Outline" },
+        always_divide_middle = true,
+      },
+      sections = {
+        lualine_a = { branch },
+        lualine_b = { diagnostics },
+        lualine_c = {
+          {
+            "filename",
+            file_status = false, -- displays file status (readonly status, modified status)
+            path = 1,      -- 0 = just filename, 1 = relative path, 2 = absolute path
           },
-          lualine_x = { diff, spaces, "encoding", filetype },
-          lualine_y = { location },
-          lualine_z = { progress },
         },
-        inactive_sections = {
-          lualine_a = {},
-          lualine_b = {},
-          lualine_c = {},
-          lualine_x = { "location" },
-          lualine_y = {},
-          lualine_z = {},
-        },
-        tabline = {},
-        extensions = {},
-      }
-    )
-  end
+        lualine_x = { diff, spaces, "encoding", filetype },
+        lualine_y = { location },
+        lualine_z = { progress },
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = { "location" },
+        lualine_y = {},
+        lualine_z = {},
+      },
+      tabline = {},
+      extensions = {},
+    })
+  end,
 }
