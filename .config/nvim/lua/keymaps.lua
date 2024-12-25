@@ -16,6 +16,9 @@
 -- NOTE: you can `:map {lhs}`(or nmap, vmap and ...) to see keybinding for specific shortcut.
 -- NOTE: i.e: `:nmap K` shows you that it's mapped to `vim.lsp.buf.hover()`
 
+-- NOTE: see `:h tagstack`, you can use <CTRL-T> to jump back to older entry in tagstack
+-- NOTE: see `:h jump-motions`, you can use <CTRL-O>(go to older position) and <CTRL-I>(go to newer position)
+
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 local term_opts = { silent = true }

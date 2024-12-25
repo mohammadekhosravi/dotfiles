@@ -47,6 +47,9 @@ return {
 
 				-- NOTE: You can press `K` to go inside of opened popup in any of lsp stuff.
 				-- NOTE: for example `K` show you hover text and you can press `K` again to go inside of popup text.
+
+				-- NOTE: builtin lsp operate on tagstack and jumplist (see :h tagstach & :h jump-motions so you can use builtin shortcut with them
+				-- NOTE: i.e: <CTRL-T> after go to definition returns you to original position.
 				nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 				nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
