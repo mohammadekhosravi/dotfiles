@@ -65,7 +65,7 @@
 #"rxvt"
 #  Control + b:2 + Release
 #
-"xkblayout-state set +1"
+"xkb-switch -n"
   Alt + n
 
 

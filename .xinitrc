@@ -59,10 +59,10 @@ export SSH_AUTH_SOCK
 # see https://github.com/NixOS/nixpkgs/issues/14966#issuecomment-520083836
 mkdir -p "$HOME"/.local/share/keyrings
 
-# xrandr -s 1920x1080 &`
-monitorResolution.sh &
+xrandr -s 1920x1080 &
+# monitorResolution.sh &
+setxkbmap -option caps:escape &
 setxkbmap -layout us,ir &
 xbindkeys &
 # make capslock do the esc work too.
-setxkbmap -option caps:escape &
 exec dwm

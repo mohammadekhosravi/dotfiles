@@ -89,3 +89,11 @@ export NVM_DIR="$HOME/.nvm"
 [[ -d $HOME/.bin ]] && export PATH=$HOME/.bin:$PATH
 [[ -d $HOME/go ]] && export PATH=$HOME/go:$PATH
 [[ -d $HOME/go ]] && export PATH=$HOME/go/bin:$PATH
+
+nvm use --lts > /dev/null 2>&1
+
+# Pyenv python version manager
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
