@@ -18,10 +18,14 @@ This directory contains all of config files for replicating current system, mana
    sudo pacman -S zsh
    ```
 
-3. alacritty
+3. konsole
+
    ```sh
-   sudo pacman -S alacritty
+   sudo pacman -S konsole
    ```
+
+   konsole is the only terminal emulator that i found the properly support farsi
+
 4. Hack Nerd Font
    ```sh
    sudo pacman -S ttf-hack-nerd
