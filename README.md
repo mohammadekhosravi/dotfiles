@@ -46,7 +46,14 @@ This directory contains all of config files for replicating current system, mana
 
    for z command
 
-7. xkb-switch
+7. xbindkeys
+
+   ```sh
+   sudo pacman -S xbindkeys
+   ```
+   for keyboard layout switch
+
+8. xkb-switch
 
    ```sh
    sudo yay -S xkb-switch
@@ -54,6 +61,14 @@ This directory contains all of config files for replicating current system, mana
 
    for keyboard layout switch. all other pieces are all ready set up.
    you need to use `setxkbmap -layout us,ir` then, `setxkbmap` and config `Alt+n` to do `xkb-switch -n` in the `~/.xbindkeysrc`
+
+9. feh
+   ```sh
+   sudo pacman -S feh
+   feh --bg-fill /path/to/wallpaper.jpg
+   ```
+
+   for setting wallpaper
 
 ## Usage
 

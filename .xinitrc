@@ -8,15 +8,7 @@ sysmodmap=/etc/X11/xinit/.Xmodmap
 # merge in defaults and keymaps
 
 if [ -f $sysresources ]; then
-
-
-
-
-
-
-
     xrdb -merge $sysresources
-
 fi
 
 if [ -f $sysmodmap ]; then
@@ -24,15 +16,7 @@ if [ -f $sysmodmap ]; then
 fi
 
 if [ -f "$userresources" ]; then
-
-
-
-
-
-
-
     xrdb -merge "$userresources"
-
 fi
 
 if [ -f "$usermodmap" ]; then
@@ -59,10 +43,15 @@ export SSH_AUTH_SOCK
 # see https://github.com/NixOS/nixpkgs/issues/14966#issuecomment-520083836
 mkdir -p "$HOME"/.local/share/keyrings
 
-xrandr -s 1920x1080 &
-# monitorResolution.sh &
+# xrandr -s 1920x1080 &
+monitorResolution.sh &
 setxkbmap -option caps:escape &
 setxkbmap -layout us,ir &
 xbindkeys &
 # make capslock do the esc work too.
+
+# restore background (wait briefly to avoid race condition)
+sleep 0.4
+[ -f "$HOME/.fehbg" ] && "$HOME/.fehbg" &
+
 exec dwm
