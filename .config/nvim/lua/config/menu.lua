@@ -10,7 +10,7 @@ vim.cmd([[
 ]])
 
 local function check_line_for_url()
-  local current_line = unpack(vim.api.nvim_win_get_cursor(0))
+  local current_line = vim.api.nvim_win_get_cursor(0)[1]
   local current_line_content = vim.api.nvim_buf_get_lines(0, current_line - 1, current_line, false)[1]
   local url_pattern = "https?://[^%s\"'<>%#]*[^.,;%s]"
   local url_match = current_line_content:match(url_pattern)

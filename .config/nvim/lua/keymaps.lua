@@ -33,7 +33,7 @@ keymap({ "n", "v" }, "<Space>", "<Nop>", term_opts)
 keymap("n", "<C-h>", "<C-w>h", vim.tbl_deep_extend("force", opts, { desc = "Navigate to left window" }))
 keymap("n", "<C-j>", "<C-w>j", vim.tbl_deep_extend("force", opts, { desc = "Navigate to bottom window" }))
 keymap("n", "<C-k>", "<C-w>k", vim.tbl_deep_extend("force", opts, { desc = "Navigate to top window" }))
-keymap("n", "<C-l>", "<C-w>l", { desc = "Navigate to right window" })
+keymap("n", "<C-k>", "<C-w>l", vim.tbl_deep_extend("force", opts, { desc = "Navigate to right window" }))
 
 -- Buffers Navigation
 keymap("n", "<S-l>", ":bnext<CR>", vim.tbl_deep_extend("force", opts, { desc = "Navigate to next buffer" }))
@@ -87,7 +87,7 @@ keymap("n", "<leader>st", function()
   vim.cmd.wincmd("J")
   vim.api.nvim_win_set_height(0, 8)
   vim.cmd.normal("A")
-end, vim.tbl_deep_extend("force", opts, { desc = "Open builtin termainal" }))
+end, vim.tbl_deep_extend("force", opts, { desc = "Open builtin terminal" }))
 keymap(
   "t",
   "<Esc><Esc>",
