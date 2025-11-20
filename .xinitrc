@@ -51,7 +51,7 @@ xbindkeys &
 # make capslock do the esc work too.
 
 # restore background (wait briefly to avoid race condition)
-sleep 0.4
+sleep 1
 [ -f "$HOME/.fehbg" ] && "$HOME/.fehbg" &
 
 exec dwm
