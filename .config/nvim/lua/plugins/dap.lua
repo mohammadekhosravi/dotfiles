@@ -111,9 +111,13 @@ return {
           Stopped = "⭔",
         }
     for type, icon in pairs(breakpoint_icons) do
-      local tp = "Dap" .. type
-      local hl = (type == "Stopped") and "DapStop" or "DapBreak"
-      vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
+      local hl = (type == "Stopped") and "DapStopped" or "DapBreakpoint"
+      vim.api.nvim_set_sign({
+        name  = "Dap" .. type,
+        text  = icon,
+        texthl = hl,
+        numhl = hl,
+      })
     end
 
     -- conncect dapui to dap events so its open and close automatically
