@@ -1,6 +1,5 @@
 -- npm i -g vscode-langservers-extracted
 -- You need to install this package for eslint to work properly.
-
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
@@ -14,6 +13,7 @@ return {
       },
     },
     "saghen/blink.cmp",
+    "j-hui/fidget.nvim",
   },
 
   config = function()
@@ -25,7 +25,6 @@ return {
         capabilities = capabilities,
       }
 
-      -- Specific settings for ESLint
       if name == "eslint" then
         opts.settings = {
           codeActionOnSave = {
@@ -45,7 +44,6 @@ return {
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if not client then return end
 
-        -- for lsp attached progress notification
         require("fidget").notify(client.name .. " attached", nil, { key = "lsp_attach_" .. client.name })
 
         local buf = args.buf
@@ -63,6 +61,20 @@ return {
         nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
         nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
+        -- create the Command :CodeActionsAll
+        vim.api.nvim_buf_create_user_command(buf, "CodeActionsAll", function()
+          -- We use pcall to ensure the helper module is loaded safely
+          local ok, helper = pcall(require, "helper")
+          if ok then
+            helper.code_actions_all()
+          else
+            vim.notify("Could not load lua/helper.lua", vim.log.levels.ERROR)
+          end
+        end, { desc = "Show ALL code actions from ALL sources for entire buffer" })
+
+        --  Create the Keymap <leader>cA
+        nmap("<leader>cA", "<cmd>CodeActionsAll<cr>", "[C]ode [A]ctions (Buffer)")
       end,
     })
 
