@@ -1,3 +1,6 @@
+-- npm i -g vscode-langservers-extracted
+-- You need to install this package for eslint to work properly.
+
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
@@ -16,11 +19,23 @@ return {
   config = function()
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-    local servers = { "lua_ls", "gopls", "ts_ls", "html", "cssls", "tailwindcss" }
+    local servers = { "lua_ls", "gopls", "ts_ls", "html", "cssls", "tailwindcss", "eslint" }
     for _, name in ipairs(servers) do
-      vim.lsp.config(name, {
+      local opts = {
         capabilities = capabilities,
-      })
+      }
+
+      -- Specific settings for ESLint
+      if name == "eslint" then
+        opts.settings = {
+          codeActionOnSave = {
+            enable = false,
+            mode = "all",
+          },
+        }
+      end
+
+      vim.lsp.config(name, opts)
       vim.lsp.enable(name)
     end
 
@@ -48,18 +63,6 @@ return {
         nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
         nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-        if client:supports_method("textDocument/formatting") then
-          vim.api.nvim_create_autocmd("BufWritePre", {
-            buffer = buf,
-            callback = function()
-              vim.lsp.buf.format({
-                filter = function(c) return c.name ~= "ts_ls" end,
-                bufnr = buf,
-              })
-            end,
-          })
-        end
       end,
     })
 
@@ -73,7 +76,7 @@ return {
           [vim.diagnostic.severity.HINT]  = "",
         },
       },
-      virtual_text = false,
+      virtual_text = true,
       update_in_insert = false,
       severity_sort = true,
     })
