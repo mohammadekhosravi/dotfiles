@@ -32,6 +32,30 @@ local function to_lsp_diag(d)
   }
 end
 
+local function show_menu(all_actions, bufnr)
+  if #all_actions == 0 then
+    vim.notify("No more actions", vim.log.levels.INFO)
+    return
+  end
+
+  vim.ui.select(all_actions, {
+    prompt = string.format("Code Actions (%d remaining)", #all_actions),
+    format_item = function(item)
+      local line = item.lnum and ("L" .. (item.lnum + 1)) or "BUF"
+      return string.format("[%s] %s: %s", line, item.source, item.title)
+    end,
+  }, function(choice, idx)
+    if choice then
+      apply_action(choice.client, choice.action, bufnr)
+      -- Remove applied action and reopen menu
+      table.remove(all_actions, idx)
+      vim.defer_fn(function()
+        show_menu(all_actions, bufnr)
+      end, 100)
+    end
+  end)
+end
+
 function M.code_actions_all()
   local bufnr = vim.api.nvim_get_current_buf()
   local clients = vim.lsp.get_clients({ bufnr = bufnr })
@@ -53,17 +77,7 @@ function M.code_actions_all()
       return
     end
 
-    vim.ui.select(all_actions, {
-      prompt = "Code Actions",
-      format_item = function(item)
-        local line = item.lnum and ("L" .. (item.lnum + 1)) or "BUF"
-        return string.format("[%s] %s: %s", line, item.source, item.title)
-      end,
-    }, function(choice)
-      if choice then
-        apply_action(choice.client, choice.action, bufnr)
-      end
-    end)
+    show_menu(all_actions, bufnr)
   end
 
   -- Diagnostic-based requests
