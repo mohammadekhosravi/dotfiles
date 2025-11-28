@@ -14,22 +14,24 @@ return {
   },
 
   config = function()
-    local lspconfig    = require("lspconfig")
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-    -- One‑liner per server — automatically starts when filetype matches
-    local servers      = { "lua_ls", "gopls", "ts_ls", "html", "cssls", "tailwindcss" }
+    local servers = { "lua_ls", "gopls", "ts_ls", "html", "cssls", "tailwindcss" }
     for _, name in ipairs(servers) do
-      if lspconfig[name] then
-        lspconfig[name].setup({ capabilities = capabilities })
-      end
+      vim.lsp.config(name, {
+        capabilities = capabilities,
+      })
+      vim.lsp.enable(name)
     end
 
-    -- Attach logic (modern)
+    -- Attach logic
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if not client then return end
+
+        -- for lsp attached progress notification
+        require("fidget").notify(client.name .. " attached", nil, { key = "lsp_attach_" .. client.name })
 
         local buf = args.buf
         local nmap = function(keys, func, desc)
@@ -61,10 +63,17 @@ return {
       end,
     })
 
-    -- Unified diagnostics setup
+    -- Diagnostics config
     vim.diagnostic.config({
-      signs = true,
-      virtual_text = true,
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = " ",
+          [vim.diagnostic.severity.WARN]  = " ",
+          [vim.diagnostic.severity.INFO]  = " ",
+          [vim.diagnostic.severity.HINT]  = "",
+        },
+      },
+      virtual_text = false,
       update_in_insert = false,
       severity_sort = true,
     })

@@ -54,16 +54,3 @@ vim.cmd([[set iskeyword+=-]])
 -- don't insert comment automatically
 vim.cmd("autocmd BufEnter * set formatoptions-=cro")
 vim.cmd("autocmd BufEnter * setlocal formatoptions-=cro")
-
--- disable virtual text
-vim.diagnostic.config({
-  virtual_text = false,
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = " ",
-      [vim.diagnostic.severity.WARN]  = " ",
-      [vim.diagnostic.severity.INFO]  = " ",
-      [vim.diagnostic.severity.HINT]  = "",
-    },
-  },
-})
