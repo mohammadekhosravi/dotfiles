@@ -25,6 +25,32 @@ return {
         capabilities = capabilities,
       }
 
+      -- TypeScript - make it smarter
+      if name == "ts_ls" then
+        opts.settings = {
+          typescript = {
+            suggest = {
+              completeFunctionCalls = true,
+              autoImports = true,
+            },
+            preferences = {
+              includeCompletionsForModuleExports = true,
+              includeCompletionsWithSnippetText = true,
+            },
+          },
+          javascript = {
+            suggest = {
+              completeFunctionCalls = true,
+              autoImports = true,
+            },
+            preferences = {
+              includeCompletionsForModuleExports = true,
+              includeCompletionsWithSnippetText = true,
+            },
+          },
+        }
+      end
+
       if name == "eslint" then
         opts.settings = {
           codeActionOnSave = {
