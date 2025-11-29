@@ -9,12 +9,32 @@ return {
       client.server_capabilities.documentFormattingProvider = false
       client.server_capabilities.documentRangeFormattingProvider = false
 
-      -- TypeScript specific keymaps
+      -- keymaps helper
       local map = function(keys, func, desc)
         vim.keymap.set("n", keys, func, { buffer = bufnr, desc = "TS: " .. desc })
       end
 
       map("<leader>ai", "<cmd>TSToolsAddMissingImports<cr>", "Add Missing Imports")
+
+      -- Inlay hints toggle (default: OFF for cleaner look)
+      if vim.lsp.inlay_hint then
+        -- Start with inlay hints disabled
+        vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+
+        -- Toggle inlay hints for current buffer
+        map("<leader>th", function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+          local status = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }) and "enabled" or "disabled"
+          vim.notify("Inlay hints " .. status, vim.log.levels.INFO)
+        end, "Toggle Inlay Hints (buffer)")
+
+        -- Toggle inlay hints globally
+        map("<leader>tH", function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+          local status = vim.lsp.inlay_hint.is_enabled() and "enabled" or "disabled"
+          vim.notify("Inlay hints " .. status .. " (global)", vim.log.levels.INFO)
+        end, "Toggle Inlay Hints (global)")
+      end
     end,
 
     settings = {
@@ -30,19 +50,18 @@ return {
       -- tsserver settings
       tsserver_path = nil,
       tsserver_plugins = {},
-
       tsserver_max_memory = "auto",
-
       tsserver_format_options = {},
 
       tsserver_file_preferences = {
-        includeInlayParameterNameHints = "none",
+        includeInlayParameterNameHints = "all", -- "none" | "literals" | "all"
         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-        includeInlayFunctionParameterTypeHints = false,
-        includeInlayVariableTypeHints = false,
-        includeInlayPropertyDeclarationTypeHints = false,
-        includeInlayFunctionLikeReturnTypeHints = false,
-        includeInlayEnumMemberValueHints = false,
+        includeInlayFunctionParameterTypeHints = true,
+        includeInlayVariableTypeHints = true,
+        includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+        includeInlayPropertyDeclarationTypeHints = true,
+        includeInlayFunctionLikeReturnTypeHints = true,
+        includeInlayEnumMemberValueHints = true,
 
         -- IMPORTANT: These enable auto-imports
         includeCompletionsForModuleExports = true,
@@ -50,14 +69,17 @@ return {
         includeCompletionsWithSnippetText = true,
         includeCompletionsWithInsertText = true,
         includeAutomaticOptionalChainCompletions = true,
+        includeCompletionsWithObjectLiteralMethodSnippets = true,
 
         -- Import organization
-        importModuleSpecifierPreference = "shortest",
+        importModuleSpecifierPreference = "non-relative",
         importModuleSpecifierEnding = "auto",
         allowTextChangesInNewFiles = true,
         providePrefixAndSuffixTextForRename = true,
 
-        quotePreference = "auto",
+        quotePreference = "auto",             -- "auto" | "single" | "double"
+        -- JSX
+        jsxAttributeCompletionStyle = "auto", -- "auto" | "braces" | "none"
       },
 
       -- CRITICAL: Complete function calls with parentheses

@@ -94,9 +94,6 @@ return {
         end, { desc = "Show git blame for line" })
         map("n", "<leader>tb", gitsigns.toggle_current_line_blame, { desc = "Toggle current line blame" })
         map("n", "<leader>hd", gitsigns.diffthis, { desc = "Show diff for this buffer" })
-        map("n", "<leader>hD", function()
-          gitsigns.diffthis("~")
-        end, { desc = "Show diff for this project" })
         map("n", "<leader>td", gitsigns.toggle_deleted, { desc = "Toggle deleted" })
 
         -- Text object
