@@ -27,30 +27,32 @@ return {
         draw = {
           columns = {
             { 'kind_icon' },
-            { 'label',    'label_description', gap = 1 },
+            { 'label',      'label_description', gap = 1 },
+            { 'source_name' },
           },
           treesitter = { 'lsp' },
         },
       },
-      ghost_text = { enabled = true },
+      ghost_text = { enabled = false },
 
-      -- KEY: Make completions smarter
       list = {
-        -- Only show completions when LSP actually returns results
         selection = {
           preselect = true,
           auto_insert = false,
         },
       },
 
-      -- Don't trigger on every character - be more selective
       trigger = {
-        -- Show completion after typing trigger characters (like '.')
         show_on_trigger_character = true,
-        -- Don't auto-show for blocked filetypes
         show_on_blocked_trigger_characters = { ' ', '\n', '\t' },
-        -- Only show when there are actual results
-        show_in_snippet = false,
+        show_in_snippet = true,
+      },
+
+      -- IMPORTANT: This makes auto-imports work!
+      accept = {
+        auto_brackets = {
+          enabled = true,
+        },
       },
     },
 
@@ -61,26 +63,34 @@ return {
 
     sources = {
       default = { 'lsp', 'path', 'snippets', 'buffer' },
-      -- Prioritize LSP over buffer - this is important!
       providers = {
         lsp = {
-          score_offset = 100, -- Higher priority
-          fallbacks = {},     -- Don't fallback when LSP returns nothing
+          score_offset = 100,
+          fallbacks = {},
         },
         buffer = {
-          score_offset = -50,     -- Lower priority
-          min_keyword_length = 3, -- Only suggest buffer words 3+ chars
+          score_offset = -100,
+          min_keyword_length = 4,
+          max_items = 5,
         },
         snippets = {
-          score_offset = 80,
+          score_offset = 90,
         },
         path = {
-          score_offset = 90,
+          score_offset = 95,
         },
       },
     },
 
-    fuzzy = { implementation = "prefer_rust_with_warning" },
+    fuzzy = {
+      implementation = "prefer_rust_with_warning",
+      -- Better fuzzy matching
+      frecency = {
+        -- Whether to enable the frecency feature
+        enabled = true,
+      },
+      use_proximity = true,
+    },
   },
   opts_extend = { "sources.default" },
 }

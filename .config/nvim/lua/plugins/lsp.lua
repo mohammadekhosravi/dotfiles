@@ -1,5 +1,3 @@
--- npm i -g vscode-langservers-extracted
--- You need to install this package for eslint to work properly.
 return {
   "neovim/nvim-lspconfig",
   dependencies = {
@@ -19,33 +17,31 @@ return {
   config = function()
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-    local servers = { "lua_ls", "gopls", "ts_ls", "html", "cssls", "tailwindcss", "eslint" }
+    -- REMOVED ts_ls - using typescript-tools instead
+    local servers = { "lua_ls", "gopls", "html", "cssls", "tailwindcss", "eslint" }
+
     for _, name in ipairs(servers) do
       local opts = {
         capabilities = capabilities,
       }
 
-      -- TypeScript - make it smarter
-      if name == "ts_ls" then
+      if name == "lua_ls" then
         opts.settings = {
-          typescript = {
-            suggest = {
-              completeFunctionCalls = true,
-              autoImports = true,
-            },
-            preferences = {
-              includeCompletionsForModuleExports = true,
-              includeCompletionsWithSnippetText = true,
-            },
+          Lua = {
+            workspace = { checkThirdParty = false },
+            telemetry = { enable = false },
+            completion = { callSnippet = "Replace" },
           },
-          javascript = {
-            suggest = {
-              completeFunctionCalls = true,
-              autoImports = true,
-            },
-            preferences = {
-              includeCompletionsForModuleExports = true,
-              includeCompletionsWithSnippetText = true,
+        }
+      end
+
+      if name == "gopls" then
+        opts.settings = {
+          gopls = {
+            completeUnimported = true,
+            usePlaceholders = true,
+            analyses = {
+              unusedparams = true,
             },
           },
         }
@@ -88,9 +84,7 @@ return {
         nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
         nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-        -- create the Command :CodeActionsAll
         vim.api.nvim_buf_create_user_command(buf, "CodeActionsAll", function()
-          -- We use pcall to ensure the helper module is loaded safely
           local ok, helper = pcall(require, "helper")
           if ok then
             helper.code_actions_all()
@@ -99,12 +93,10 @@ return {
           end
         end, { desc = "Show ALL code actions from ALL sources for entire buffer" })
 
-        --  Create the Keymap <leader>cA
         nmap("<leader>cA", "<cmd>CodeActionsAll<cr>", "[C]ode [A]ctions (Buffer)")
       end,
     })
 
-    -- Diagnostics config
     vim.diagnostic.config({
       signs = {
         text = {
@@ -117,6 +109,10 @@ return {
       virtual_text = false,
       update_in_insert = false,
       severity_sort = true,
+      float = {
+        border = "rounded",
+        source = true,
+      },
     })
   end,
 }
