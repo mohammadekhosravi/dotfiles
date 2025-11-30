@@ -68,9 +68,9 @@ return {
     vim.diagnostic.config({
       signs = {
         text = {
-          [vim.diagnostic.severity.ERROR] = " ",
-          [vim.diagnostic.severity.WARN]  = " ",
-          [vim.diagnostic.severity.INFO]  = " ",
+          [vim.diagnostic.severity.ERROR] = " ",
+          [vim.diagnostic.severity.WARN]  = " ",
+          [vim.diagnostic.severity.INFO]  = " ",
           [vim.diagnostic.severity.HINT]  = "󰌵 ",
         },
       },
@@ -172,8 +172,38 @@ return {
         -- CUSTOM KEYMAPS (not Neovim defaults)
         -- ═══════════════════════════════════════════════════════════════════
 
-        -- Telescope references (alternative to grr if prefer Telescope UI)
-        map("n", "<leader>gr", require("telescope.builtin").lsp_references, "LSP: References (Telescope)")
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Telescope-enhanced LSP (alternatives with better UI)
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Pattern: <leader>gr* = enhanced version of gr* default
+
+        -- References with Telescope UI (alternative to grr which uses quickfix)
+        map("n", "<leader>grr", require("telescope.builtin").lsp_references, "LSP: References (Telescope)")
+
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Call Hierarchy (understanding code flow)
+        -- ─────────────────────────────────────────────────────────────────────
+        -- These are invaluable for navigating and understanding codebases,
+        -- especially in React where components call other components.
+        --
+        -- Incoming Calls: "Who calls this function/component?"
+        --   Use cases:
+        --   • Before refactoring: see all usages that might break
+        --   • Before deleting: ensure nothing depends on this code
+        --   • Debugging: find what parent component triggers re-renders
+        --   Example: Cursor on <Button> → shows ProductCard, Modal, Header use it
+        --
+        -- Outgoing Calls: "What does this function/component call?"
+        --   Use cases:
+        --   • Understanding unfamiliar code: see all dependencies at a glance
+        --   • Performance audit: see what expensive operations get triggered
+        --   • Tracing data flow: follow function calls through the codebase
+        --   Example: Cursor on ProductCard → shows it uses Button, formatPrice, etc.
+        -- ─────────────────────────────────────────────────────────────────────
+        map("n", "<leader>grc", require("telescope.builtin").lsp_incoming_calls,
+          "LSP: Incoming [C]alls (who calls this?)")
+        map("n", "<leader>grC", require("telescope.builtin").lsp_outgoing_calls,
+          "LSP: Outgoing [C]alls (what does this call?)")
 
         -- ─────────────────────────────────────────────────────────────────────
         -- Diagnostics (floating windows matching hover style)
@@ -226,7 +256,7 @@ return {
           end
         end, { desc = "Show ALL code actions from ALL sources for entire buffer" })
 
-        map("n", "<leader>cA", "<cmd>CodeActionsAll<cr>", "LSP: [C]ode [A]ctions (Buffer)")
+        map("n", "<leader>gra", "<cmd>CodeActionsAll<cr>", "LSP: [C]ode [A]ctions (Buffer)")
       end,
     })
   end,
