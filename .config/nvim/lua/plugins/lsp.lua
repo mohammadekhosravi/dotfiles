@@ -81,8 +81,20 @@ return {
         nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
         nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
         nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
-        nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
         nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+        nmap("<C-k>", function()
+          vim.lsp.buf.signature_help({
+            max_width = math.floor(vim.o.columns * 0.7),
+            max_height = math.floor(vim.o.lines * 0.4),
+          })
+        end, "LSP Signature Documentation")
+        --
+        nmap("K", function()
+          vim.lsp.buf.hover({
+            max_width = math.floor(vim.o.columns * 0.7),
+            max_height = math.floor(vim.o.lines * 0.4),
+          })
+        end, "LSP Hover")
 
         vim.api.nvim_buf_create_user_command(buf, "CodeActionsAll", function()
           local ok, helper = pcall(require, "helper")
