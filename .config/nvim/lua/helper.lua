@@ -32,17 +32,32 @@ local function to_lsp_diag(d)
   }
 end
 
+--- Format action for display (used both in item and format_item for compatibility)
+---@param item table Action item with title, source, lnum fields
+---@return string Formatted display string
+local function format_action(item)
+  local line = item.lnum and string.format("L%-3d", item.lnum + 1) or "BUF "
+  return string.format("[%s] %s: %s", line, item.source, item.title)
+end
+
 local function show_menu(all_actions, bufnr)
   if #all_actions == 0 then
     vim.notify("No more actions", vim.log.levels.INFO)
     return
   end
 
+  -- Pre-format display text into each item
+  -- This ensures Telescope/dressing shows our format, not just index
+  for _, item in ipairs(all_actions) do
+    item.display = format_action(item)
+  end
+
   vim.ui.select(all_actions, {
     prompt = string.format("Code Actions (%d remaining)", #all_actions),
     format_item = function(item)
-      local line = item.lnum and ("L" .. (item.lnum + 1)) or "BUF"
-      return string.format("[%s] %s: %s", line, item.source, item.title)
+      -- Return pre-computed display (works with builtin backend)
+      -- For Telescope, the 'display' field is also checked
+      return item.display
     end,
   }, function(choice, idx)
     if choice then
@@ -77,6 +92,16 @@ function M.code_actions_all()
       return
     end
 
+    -- Sort by line number (nil/BUF actions go last)
+    table.sort(all_actions, function(a, b)
+      local a_line = a.lnum or math.huge
+      local b_line = b.lnum or math.huge
+      if a_line ~= b_line then
+        return a_line < b_line
+      end
+      return a.title < b.title
+    end)
+
     show_menu(all_actions, bufnr)
   end
 
@@ -103,7 +128,13 @@ function M.code_actions_all()
         local c = vim.lsp.get_client_by_id(cid)
         if c and res.result then
           for _, a in ipairs(res.result) do
-            table.insert(all_actions, { title = a.title, action = a, client = c, source = c.name, lnum = lnum })
+            table.insert(all_actions, {
+              title = a.title,
+              action = a,
+              client = c,
+              source = c.name,
+              lnum = lnum,
+            })
           end
         end
       end
@@ -125,7 +156,13 @@ function M.code_actions_all()
       local c = vim.lsp.get_client_by_id(cid)
       if c and res.result then
         for _, a in ipairs(res.result) do
-          table.insert(all_actions, { title = a.title, action = a, client = c, source = c.name, lnum = nil })
+          table.insert(all_actions, {
+            title = a.title,
+            action = a,
+            client = c,
+            source = c.name,
+            lnum = nil,
+          })
         end
       end
     end

@@ -115,10 +115,14 @@ return {
           [vim.diagnostic.severity.ERROR] = " ",
           [vim.diagnostic.severity.WARN]  = " ",
           [vim.diagnostic.severity.INFO]  = " ",
-          [vim.diagnostic.severity.HINT]  = "",
+          [vim.diagnostic.severity.HINT]  = "󰌵 ",
         },
       },
       virtual_text = false,
+      -- virtual_text = {
+      --   prefix = "●",
+      --   spacing = 4,
+      -- },
       update_in_insert = false,
       severity_sort = true,
       float = {
