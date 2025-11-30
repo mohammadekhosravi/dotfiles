@@ -7,6 +7,7 @@
 --   • Dynamic color extraction from current colorscheme
 --   • Wildmenu (command-line completion) styling
 --   • Window separator styling
+--   • LSP inlay hints styling
 --
 -- NOTE: Keymaps are NOT set here (see lsp.lua and keymaps.lua)
 -- NOTE: Diagnostic config is NOT set here (see lsp.lua)
@@ -70,6 +71,9 @@ return {
 
         -- Cursor line (for quickfix, etc.)
         cursorline_bg = cursor_line.bg or "#2c323c",
+
+        -- Inlay hints (dim, like comments or diagnostic hints)  ← NEW
+        inlay_fg = comment.fg or "#5c6370",
       }
     end
 
@@ -89,7 +93,7 @@ return {
 
       vim.api.nvim_set_hl(0, "PmenuSel", {
         bg = c.sel_bg,
-        fg = c.sel_fg, -- nil inherits, avoids harsh white
+        fg = c.sel_fg,
         bold = true,
       })
 
@@ -144,6 +148,15 @@ return {
       vim.api.nvim_set_hl(0, "QuickFixLine", {
         bg = c.cursorline_bg,
         bold = true,
+      })
+
+      -- ─────────────────────────────────────────────────────────────────
+      -- LSP Inlay Hints
+      -- ─────────────────────────────────────────────────────────────────
+      vim.api.nvim_set_hl(0, "LspInlayHint", {
+        fg = c.inlay_fg,
+        bg = "NONE",
+        italic = true,
       })
     end
 
