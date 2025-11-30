@@ -60,55 +60,11 @@ return {
       vim.lsp.enable(name)
     end
 
-    -- Attach logic
-    vim.api.nvim_create_autocmd("LspAttach", {
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        if not client then return end
-
-        require("fidget").notify(client.name .. " attached", nil, { key = "lsp_attach_" .. client.name })
-
-        local buf = args.buf
-        local nmap = function(keys, func, desc)
-          vim.keymap.set("n", keys, func, { buffer = buf, desc = desc and ("LSP: " .. desc) })
-        end
-
-        nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-        nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-        nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
-        nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-        nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
-        nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
-        nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-        nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
-        nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-        nmap("<C-k>", function()
-          vim.lsp.buf.signature_help({
-            max_width = math.floor(vim.o.columns * 0.7),
-            max_height = math.floor(vim.o.lines * 0.4),
-          })
-        end, "LSP Signature Documentation")
-        --
-        nmap("K", function()
-          vim.lsp.buf.hover({
-            max_width = math.floor(vim.o.columns * 0.7),
-            max_height = math.floor(vim.o.lines * 0.4),
-          })
-        end, "LSP Hover")
-
-        vim.api.nvim_buf_create_user_command(buf, "CodeActionsAll", function()
-          local ok, helper = pcall(require, "helper")
-          if ok then
-            helper.code_actions_all()
-          else
-            vim.notify("Could not load lua/helper.lua", vim.log.levels.ERROR)
-          end
-        end, { desc = "Show ALL code actions from ALL sources for entire buffer" })
-
-        nmap("<leader>cA", "<cmd>CodeActionsAll<cr>", "[C]ode [A]ctions (Buffer)")
-      end,
-    })
-
+    -- ═══════════════════════════════════════════════════════════════════════
+    -- DIAGNOSTIC CONFIGURATION
+    -- ═══════════════════════════════════════════════════════════════════════
+    -- Float settings match hover/signature_help for visual consistency
+    -- ═══════════════════════════════════════════════════════════════════════
     vim.diagnostic.config({
       signs = {
         text = {
@@ -119,16 +75,159 @@ return {
         },
       },
       virtual_text = false,
-      -- virtual_text = {
-      --   prefix = "●",
-      --   spacing = 4,
-      -- },
       update_in_insert = false,
       severity_sort = true,
+      -- ─────────────────────────────────────────────────────────────────────
+      -- Floating window styling (matches hover/signature_help)
+      -- ─────────────────────────────────────────────────────────────────────
       float = {
         border = "rounded",
         source = true,
+        header = "",
+        prefix = "● ",
+        focusable = true,
+        max_width = math.floor(vim.o.columns * 0.7),
+        max_height = math.floor(vim.o.lines * 0.4),
       },
+    })
+
+    -- ═══════════════════════════════════════════════════════════════════════
+    -- LSP ATTACH CALLBACK
+    -- ═══════════════════════════════════════════════════════════════════════
+    vim.api.nvim_create_autocmd("LspAttach", {
+      callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if not client then return end
+
+        require("fidget").notify(client.name .. " attached", nil, { key = "lsp_attach_" .. client.name })
+
+        local buf = args.buf
+
+        local map = function(mode, keys, func, desc)
+          vim.keymap.set(mode, keys, func, { buffer = buf, desc = desc })
+        end
+
+        -- ═══════════════════════════════════════════════════════════════════
+        -- NEOVIM 0.11+ DEFAULT LSP KEYMAPS (with descriptions & customizations)
+        -- ═══════════════════════════════════════════════════════════════════
+        -- These override the defaults to add descriptions and our styling.
+        -- Reference: :h lsp-defaults
+        -- ═══════════════════════════════════════════════════════════════════
+
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Hover & Signature Help
+        -- ─────────────────────────────────────────────────────────────────────
+        -- K (default) - Hover documentation
+        map("n", "K", function()
+          vim.lsp.buf.hover({
+            max_width = math.floor(vim.o.columns * 0.7),
+            max_height = math.floor(vim.o.lines * 0.4),
+          })
+        end, "LSP: Hover Documentation")
+
+        -- <C-s> (default in insert mode) - Signature help
+        map("i", "<C-s>", function()
+          vim.lsp.buf.signature_help({
+            max_width = math.floor(vim.o.columns * 0.7),
+            max_height = math.floor(vim.o.lines * 0.4),
+          })
+        end, "LSP: Signature Help")
+
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Navigation (defaults)
+        -- ─────────────────────────────────────────────────────────────────────
+        -- gd (default) - Go to definition
+        map("n", "gd", vim.lsp.buf.definition, "LSP: [G]oto [D]efinition")
+
+        -- gD (default) - Go to declaration
+        map("n", "gD", vim.lsp.buf.declaration, "LSP: [G]oto [D]eclaration")
+
+        -- gri (default) - Go to implementation
+        map("n", "gri", vim.lsp.buf.implementation, "LSP: [G]oto [I]mplementation")
+
+        -- grr (default) - Go to references
+        map("n", "grr", vim.lsp.buf.references, "LSP: [G]oto [R]eferences")
+
+        -- grt (default) - Go to type definition
+        map("n", "grt", vim.lsp.buf.type_definition, "LSP: [G]oto [T]ype Definition")
+
+        -- gO (default) - Document symbols
+        map("n", "gO", vim.lsp.buf.document_symbol, "LSP: Document Symbols")
+
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Code Actions & Refactoring (defaults)
+        -- ─────────────────────────────────────────────────────────────────────
+        -- grn (default) - Rename symbol
+        map("n", "grn", vim.lsp.buf.rename, "LSP: [R]e[n]ame")
+
+        -- gra (default) - Code action (works in normal and visual mode)
+        map({ "n", "x" }, "gra", vim.lsp.buf.code_action, "LSP: Code [A]ction")
+
+        -- ─────────────────────────────────────────────────────────────────────
+        -- CTRL-] (default) - Jump to definition (tagfunc integration)
+        -- ─────────────────────────────────────────────────────────────────────
+        -- This is set via tagfunc by Neovim automatically, no need to remap
+
+        -- ═══════════════════════════════════════════════════════════════════
+        -- CUSTOM KEYMAPS (not Neovim defaults)
+        -- ═══════════════════════════════════════════════════════════════════
+
+        -- Telescope references (alternative to grr if prefer Telescope UI)
+        map("n", "<leader>gr", require("telescope.builtin").lsp_references, "LSP: References (Telescope)")
+
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Diagnostics (floating windows matching hover style)
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Show diagnostic float for current line
+        map("n", "<leader>sd", function()
+          vim.diagnostic.open_float({ scope = "line" })
+        end, "LSP: [S]how [D]iagnostic (line)")
+
+        -- Show diagnostic float for cursor position only
+        map("n", "<leader>sD", function()
+          vim.diagnostic.open_float({ scope = "cursor" })
+        end, "LSP: [S]how [D]iagnostic (cursor)")
+
+        -- Navigate diagnostics (all severities)
+        map("n", "[d", function()
+          vim.diagnostic.jump({ count = -1, float = false })
+        end, "Previous Diagnostic")
+
+        map("n", "]d", function()
+          vim.diagnostic.jump({ count = 1, float = false })
+        end, "Next Diagnostic")
+
+        -- Navigate errors only (skip warnings/hints)
+        map("n", "[e", function()
+          vim.diagnostic.jump({
+            count = -1,
+            severity = vim.diagnostic.severity.ERROR,
+            float = false,
+          })
+        end, "Previous Error")
+
+        map("n", "]e", function()
+          vim.diagnostic.jump({
+            count = 1,
+            severity = vim.diagnostic.severity.ERROR,
+            float = false,
+          })
+        end, "Next Error")
+
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Buffer-wide Code Actions
+        -- ─────────────────────────────────────────────────────────────────────
+        vim.api.nvim_buf_create_user_command(buf, "CodeActionsAll", function()
+          local ok, helper = pcall(require, "helper")
+          if ok then
+            helper.code_actions_all()
+          else
+            vim.notify("Could not load lua/helper.lua", vim.log.levels.ERROR)
+          end
+        end, { desc = "Show ALL code actions from ALL sources for entire buffer" })
+
+        map("n", "<leader>cA", "<cmd>CodeActionsAll<cr>", "LSP: [C]ode [A]ctions (Buffer)")
+      end,
     })
   end,
 }
