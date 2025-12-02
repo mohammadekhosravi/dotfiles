@@ -56,8 +56,9 @@ return {
       },
     },
 
+    -- This would help you when calling a function, we disable automatic sianature_help, but you can still invoke it with a keymap
     signature = {
-      enabled = true,
+      enabled = false,
       window = { border = 'rounded' },
     },
 
