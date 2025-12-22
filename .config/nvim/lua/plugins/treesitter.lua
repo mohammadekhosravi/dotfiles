@@ -1,9 +1,9 @@
 return {
   "nvim-treesitter/nvim-treesitter",
+  branch = "master", -- Pin to master to ensure stability and keep 'ensure_installed' working
   build = ":TSUpdate",
-  event = { "BufReadPre", "BufNewFile" },
+  lazy = false,
   dependencies = {
-    "nvim-treesitter/nvim-treesitter-textobjects",
     "JoosepAlviste/nvim-ts-context-commentstring",
   },
   config = function()

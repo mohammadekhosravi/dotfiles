@@ -1,7 +1,6 @@
 return {
   "pmizio/typescript-tools.nvim",
   dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-  ft = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
 
   opts = {
     on_attach = function(client, bufnr)
@@ -66,7 +65,8 @@ return {
         -- IMPORTANT: These enable auto-imports
         includeCompletionsForModuleExports = true,
         includeCompletionsForImportStatements = true,
-        includeCompletionsWithSnippetText = true,
+        -- Dont turn this on, it make jsx highlighted for some reason
+        includeCompletionsWithSnippetText = false,
         includeCompletionsWithInsertText = true,
         includeAutomaticOptionalChainCompletions = true,
         includeCompletionsWithObjectLiteralMethodSnippets = true,
@@ -83,7 +83,7 @@ return {
       },
 
       -- CRITICAL: Complete function calls with parentheses
-      complete_function_calls = true,
+      complete_function_calls = false,
 
       -- Include completions for module exports from packages
       include_completions_with_insert_text = true,
