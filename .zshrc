@@ -98,6 +98,9 @@ eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+# pipx for installing python tools globally
+eval "$(register-python-argcomplete pipx)"
+
 # pnpm
 export PNPM_HOME="/home/mamad/.local/share/pnpm"
 case ":$PATH:" in
@@ -105,3 +108,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# Created by `pipx` on 2026-01-31 07:01:06
+export PATH="$PATH:/home/mamad/.local/bin"

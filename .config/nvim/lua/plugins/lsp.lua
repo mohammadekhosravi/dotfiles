@@ -17,8 +17,7 @@ return {
   config = function()
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-    -- REMOVED ts_ls - using typescript-tools instead
-    local servers = { "lua_ls", "gopls", "html", "cssls", "tailwindcss", "eslint" }
+    local servers = { "lua_ls", "gopls", "html", "cssls", "tailwindcss", "eslint", "ts_ls" }
 
     for _, name in ipairs(servers) do
       local opts = {
@@ -52,6 +51,52 @@ return {
           codeActionOnSave = {
             enable = false,
             mode = "all",
+          },
+        }
+      end
+
+      if name == "ts_ls" then
+        opts.settings = {
+          -- We apply the same settings to both javascript and typescript
+          javascript = {
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = "all", -- "none" | "literals" | "all"
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+            },
+          },
+          typescript = {
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = "all", -- "none" | "literals" | "all"
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+            },
+          },
+        }
+
+        -- Ported generic preferences to init_options (standard for ts_ls)
+        opts.init_options = {
+          preferences = {
+            importModuleSpecifierPreference = "non-relative",
+            importModuleSpecifierEnding = "auto",
+            quotePreference = "auto",
+            jsxAttributeCompletionStyle = "auto",
+            allowTextChangesInNewFiles = true,
+            providePrefixAndSuffixTextForRename = true,
+            includeCompletionsForModuleExports = true,
+            includeCompletionsForImportStatements = true,
+            includeCompletionsWithInsertText = true,
+            includeAutomaticOptionalChainCompletions = true,
           },
         }
       end
@@ -105,6 +150,35 @@ return {
 
         local map = function(mode, keys, func, desc)
           vim.keymap.set(mode, keys, func, { buffer = buf, desc = desc })
+        end
+
+        -- ═══════════════════════════════════════════════════════════════════
+        -- ADDED: SPECIFIC TYPESCRIPT SETUP (Previously in typescript-tools)
+        -- ═══════════════════════════════════════════════════════════════════
+        if client.name == "ts_ls" then
+          -- Disable formatting (let prettier/eslint handle it)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+
+          -- Replicate "Add Missing Imports" functionality
+          -- TSToolsAddMissingImports is not available, so we use the native code action
+          map("n", "<leader>ai", function()
+            vim.lsp.buf.code_action({
+              apply = true,
+              context = {
+                only = { "source.addMissingImports.ts" },
+                diagnostics = {},
+              },
+            })
+          end, "TS: Add Missing Imports")
+
+          -- Replicate "Toggle Inlay Hints" specifically for TS if needed,
+          -- though your global toggle below handles it fine.
+
+          -- Inlay hints (start disabled as per your previous config)
+          if vim.lsp.inlay_hint then
+            vim.lsp.inlay_hint.enable(false, { bufnr = buf })
+          end
         end
 
         -- ═══════════════════════════════════════════════════════════════════
@@ -187,23 +261,42 @@ return {
         -- especially in React where components call other components.
         --
         -- Incoming Calls: "Who calls this function/component?"
-        --   Use cases:
-        --   • Before refactoring: see all usages that might break
-        --   • Before deleting: ensure nothing depends on this code
-        --   • Debugging: find what parent component triggers re-renders
-        --   Example: Cursor on <Button> → shows ProductCard, Modal, Header use it
+        --    Use cases:
+        --    • Before refactoring: see all usages that might break
+        --    • Before deleting: ensure nothing depends on this code
+        --    • Debugging: find what parent component triggers re-renders
+        --    Example: Cursor on <Button> → shows ProductCard, Modal, Header use it
         --
         -- Outgoing Calls: "What does this function/component call?"
-        --   Use cases:
-        --   • Understanding unfamiliar code: see all dependencies at a glance
-        --   • Performance audit: see what expensive operations get triggered
-        --   • Tracing data flow: follow function calls through the codebase
-        --   Example: Cursor on ProductCard → shows it uses Button, formatPrice, etc.
+        --    Use cases:
+        --    • Understanding unfamiliar code: see all dependencies at a glance
+        --    • Performance audit: see what expensive operations get triggered
+        --    • Tracing data flow: follow function calls through the codebase
+        --    Example: Cursor on ProductCard → shows it uses Button, formatPrice, etc.
         -- ─────────────────────────────────────────────────────────────────────
         map("n", "<leader>grc", require("telescope.builtin").lsp_incoming_calls,
           "LSP: Incoming [C]alls (who calls this?)")
         map("n", "<leader>grC", require("telescope.builtin").lsp_outgoing_calls,
           "LSP: Outgoing [C]alls (what does this call?)")
+
+        -- ─────────────────────────────────────────────────────────────────────
+        -- Inlay Hints (Moved here to be global for all LSPs)
+        -- ─────────────────────────────────────────────────────────────────────
+        if vim.lsp.inlay_hint then
+          -- Toggle inlay hints for current buffer
+          map("n", "<leader>th", function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = buf }), { bufnr = buf })
+            local status = vim.lsp.inlay_hint.is_enabled({ bufnr = buf }) and "enabled" or "disabled"
+            vim.notify("Inlay hints " .. status, vim.log.levels.INFO)
+          end, "Toggle Inlay Hints (buffer)")
+
+          -- Toggle inlay hints globally
+          map("n", "<leader>tH", function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+            local status = vim.lsp.inlay_hint.is_enabled() and "enabled" or "disabled"
+            vim.notify("Inlay hints " .. status .. " (global)", vim.log.levels.INFO)
+          end, "Toggle Inlay Hints (global)")
+        end
 
         -- ─────────────────────────────────────────────────────────────────────
         -- Diagnostics (floating windows matching hover style)

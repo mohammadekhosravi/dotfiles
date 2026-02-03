@@ -37,15 +37,28 @@ return {
       -- No format_on_save here - we handle it manually below
       formatters_by_ft = {
         lua = { "stylua" },
+
         javascript = { "prettierd", "prettier", stop_after_first = true },
         typescript = { "prettierd", "prettier", stop_after_first = true },
         javascriptreact = { "prettierd", "prettier", stop_after_first = true },
         typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+
         css = { "prettierd", "prettier", stop_after_first = true },
         html = { "prettierd", "prettier", stop_after_first = true },
+
+        htmldjango = { "djlint" },
+
         json = { "prettierd", "prettier", stop_after_first = true },
         yaml = { "prettierd", "prettier", stop_after_first = true },
         markdown = { "prettierd", "prettier", stop_after_first = true },
+      },
+
+      formatters = {
+        djlint = {
+          command = "djlint",
+          args = { "-", "--reformat", "--indent", "2" },
+          stdin = true,
+        },
       },
     })
 
@@ -53,9 +66,13 @@ return {
     vim.api.nvim_create_autocmd("BufWritePre", {
       group = vim.api.nvim_create_augroup("ConformFormatOnSave", { clear = true }),
       callback = function(args)
-        format_with_notify(args.buf, false) -- async = false for save
+        if vim.bo[args.buf].filetype == "htmldjango" then
+          return -- no auto format for Django
+        end
+        format_with_notify(args.buf, false)
       end,
     })
+
 
     -- Manual format keymap with notification
     vim.keymap.set({ "n", "v" }, "<leader>mp", function()
