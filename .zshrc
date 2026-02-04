@@ -96,7 +96,6 @@ nvm use --lts > /dev/null 2>&1
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
 
 # pipx for installing python tools globally
 eval "$(register-python-argcomplete pipx)"

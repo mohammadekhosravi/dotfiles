@@ -48,6 +48,8 @@ monitorResolution.sh &
 setxkbmap -option caps:escape &
 setxkbmap -layout us,ir &
 xbindkeys &
+# Bluetooth
+blueman-applet &
 # make capslock do the esc work too.
 
 # restore background (wait briefly to avoid race condition)
