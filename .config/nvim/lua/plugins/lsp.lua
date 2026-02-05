@@ -17,12 +17,22 @@ return {
 	config = function()
 		local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-		local servers = { "lua_ls", "gopls", "html", "cssls", "tailwindcss", "eslint", "ts_ls", "pyright" }
+		local servers = { "bashls", "lua_ls", "gopls", "html", "cssls", "tailwindcss", "eslint", "ts_ls", "pyright" }
 
 		for _, name in ipairs(servers) do
 			local opts = {
 				capabilities = capabilities,
 			}
+
+			if name == "bashls" then
+				opts.filetypes = { "sh", "bash", "zsh" }
+				opts.settings = {
+					bashIde = {
+						-- recursive scanning for shell scripts
+						globPattern = "**/*@(.sh|.inc|.bash|.command)",
+					},
+				}
+			end
 
 			if name == "lua_ls" then
 				opts.settings = {
