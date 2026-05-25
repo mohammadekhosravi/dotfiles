@@ -1,0 +1,15 @@
+#!/bin/sh
+
+case $BLOCK_BUTTON in
+	1) setsid -f konsole -e nmtui ;;
+	3) notify-send "Internet Module" "Connected to: $(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)" ;;
+esac
+
+# Get SSID using nmcli (NetworkManager)
+ssid=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -d: -f2)
+
+if [ -n "$ssid" ]; then
+	echo " $ssid"
+else
+	echo "睊 No Wifi"
+fi

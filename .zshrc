@@ -32,7 +32,10 @@ zinit snippet OMZP::git
 zinit snippet OMZP::sudo
 zinit snippet OMZP::archlinux
 zinit snippet OMZP::command-not-found
+# Start ssh agent
+zinit snippet OMZP::ssh-agent
 
+fpath=(~/.zsh/completions $fpath)
 # Load completions
 autoload -U compinit && compinit
 
@@ -73,6 +76,8 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # Aliases
 alias ls='ls --color'
+alias mv='mv --interactive'
+alias info='info --vi-keys'
 
 # Shell integrations
 eval "$(fzf --zsh)"
@@ -110,3 +115,10 @@ esac
 
 # Created by `pipx` on 2026-01-31 07:01:06
 export PATH="$PATH:/home/mamad/.local/bin"
+
+alias vpn-on='sudo systemctl start v2raya && echo "VPN Started at http://127.0.0.1:2017"'
+alias vpn-off='sudo systemctl stop v2raya && echo "VPN Stopped"'
+
+# Proxy Shortcuts
+alias proxyon='export http_proxy="http://127.0.0.1:20171"; export https_proxy="http://127.0.0.1:20171"; export ALL_PROXY="socks5://127.0.0.1:20170"; echo "Proxy ON"'
+alias proxyoff='unset http_proxy; unset https_proxy; unset ALL_PROXY; echo "Proxy OFF"'

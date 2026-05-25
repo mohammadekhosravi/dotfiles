@@ -25,11 +25,11 @@ fi
 
 # start some nice programs
 
-if [ -d /etc/X11/xinit/xinitrc.d ] ; then
- for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
-  [ -x "$f" ] && . "$f"
- done
- unset f
+if [ -d /etc/X11/xinit/xinitrc.d ]; then
+    for f in /etc/X11/xinit/xinitrc.d/?*.sh; do
+        [ -x "$f" ] && . "$f"
+    done
+    unset f
 fi
 
 # for vscode login
@@ -44,16 +44,25 @@ export SSH_AUTH_SOCK
 mkdir -p "$HOME"/.local/share/keyrings
 
 # xrandr -s 1920x1080 &
-monitorResolution.sh &
+# monitorResolution &
+# make capslock do the esc work too.
+sleep .5
 setxkbmap -option caps:escape &
 setxkbmap -layout us,ir &
 xbindkeys &
+# compositor(transparency, animation)
+sleep .5
+picom &
+dwmblocks &
+# Create a virtual sink named "AndroidOnly" for outputing sound
+create-android-sync &
 # Bluetooth
 blueman-applet &
-# make capslock do the esc work too.
+# Check if play full screen video, then don't turn off screen
+# autocaffeine &
 
 # restore background (wait briefly to avoid race condition)
-sleep 1
+sleep .5
 [ -f "$HOME/.fehbg" ] && "$HOME/.fehbg" &
 
 exec dwm

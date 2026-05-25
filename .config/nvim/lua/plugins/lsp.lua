@@ -17,7 +17,8 @@ return {
 	config = function()
 		local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-		local servers = { "bashls", "lua_ls", "gopls", "html", "cssls", "tailwindcss", "eslint", "ts_ls", "pyright" }
+		local servers =
+			{ "bashls", "lua_ls", "gopls", "html", "cssls", "tailwindcss", "eslint", "ts_ls", "pyright", "clangd" }
 
 		for _, name in ipairs(servers) do
 			local opts = {
@@ -123,6 +124,18 @@ return {
 				}
 			end
 
+			if name == "clangd" then
+				opts.cmd = {
+					"clangd",
+					"--background-index",
+					"--clang-tidy",
+					"--header-insertion=iwyu",
+					"--completion-style=detailed",
+					"--function-arg-placeholders",
+					"--fallback-style=llvm",
+				}
+			end
+
 			vim.lsp.config(name, opts)
 			vim.lsp.enable(name)
 		end
@@ -222,12 +235,16 @@ return {
 				-- Hover & Signature Help
 				-- ─────────────────────────────────────────────────────────────────────
 				-- K (default) - Hover documentation
-				map("n", "K", function()
-					vim.lsp.buf.hover({
-						max_width = math.floor(vim.o.columns * 0.7),
-						max_height = math.floor(vim.o.lines * 0.4),
-					})
-				end, "LSP: Hover Documentation")
+				if client.name == "clangd" then
+					map("n", "K", "<cmd>norm! K<cr>", "Open Man Page")
+				else
+					map("n", "K", function()
+						vim.lsp.buf.hover({
+							max_width = math.floor(vim.o.columns * 0.7),
+							max_height = math.floor(vim.o.lines * 0.4),
+						})
+					end, "LSP: Hover Documentation")
+				end
 
 				-- <C-s> (default in insert mode) - Signature help
 				map("i", "<C-s>", function()

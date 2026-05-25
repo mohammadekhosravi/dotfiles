@@ -1,0 +1,4 @@
+#!/bin/sh
+# Create a virtual sink named "AndroidOnly"
+# This acts as a fake speaker that AudioRelay can listen to
+pactl load-module module-null-sink sink_name=AndroidOnly sink_properties=device.description="Android_Only"

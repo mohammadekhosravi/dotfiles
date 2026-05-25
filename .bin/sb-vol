@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Handle Clicks
+case $BLOCK_BUTTON in
+1) pamixer -t ;;                 # Left click: Toggle mute
+3) setsid -f pavucontrol ;;      # Right click: Open mixer
+4) pamixer --allow-boost -i 5 ;; # Scroll Up: Vol +5
+5) pamixer --allow-boost -d 5 ;; # Scroll Down: Vol -5
+esac
+
+# Display Text
+vol="$(pamixer --get-volume)"
+mute="$(pamixer --get-mute)"
+
+if [ "$mute" = "true" ]; then
+	echo "  Muted"
+else
+	echo "  $vol%"
+fi

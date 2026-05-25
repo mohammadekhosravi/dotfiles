@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# date +'%R'
+# instead of forking to external `date` we can use bash builtins
+printf "%(%H:%M)T\n"

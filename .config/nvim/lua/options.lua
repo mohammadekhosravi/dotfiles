@@ -52,6 +52,7 @@ end
 
 vim.cmd("set whichwrap+=<,>,[,],h,l")
 vim.cmd([[set iskeyword+=-]])
+vim.cmd([[set termbidi]])
 
 -- don't insert comment automatically
 vim.cmd("autocmd BufEnter * set formatoptions-=cro")

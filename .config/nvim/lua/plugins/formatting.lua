@@ -38,6 +38,9 @@ return {
 			formatters_by_ft = {
 				lua = { "stylua" },
 
+				c = { "clang-format" },
+				cpp = { "clang-format" },
+
 				sh = { "shfmt" },
 				bash = { "shfmt" },
 				zsh = { "shfmt" },
@@ -70,6 +73,10 @@ return {
 				-- -bn  : Binary operators (like && or |) start a new line
 				-- -ci  : Switch cases are indented
 				prepend_args = { "-i", "4", "-bn", "-ci" },
+			},
+
+			["clang-format"] = {
+				prepend_args = { "-style=file", "--fallback-style=LLVM" },
 			},
 		})
 

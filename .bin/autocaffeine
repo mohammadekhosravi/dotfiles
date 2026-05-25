@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# List of programs that should stop the screensaver
+# You can add "firefox" "chromium" "mpv" etc.
+check_process() {
+  pgrep -x "vlc" >/dev/null || pgrep -x "mpv" >/dev/null
+}
+
+while true; do
+  # Check if VLC or MPV is running
+  if check_process; then
+    # If running, disable screensaver
+    xset s off -dpms
+  else
+    # If NOT running, restore screensaver (10 mins)
+    xset s default
+    xset +dpms
+    xset dpms 600 600 600
+  fi
+
+  # Wait 60 seconds before checking again
+  sleep 60
+done

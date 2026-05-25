@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# --- CONFIGURATION ---
+WIN_IP="192.168.70.162" # Your Windows IP
+WIN_USER="moham"        # Your Windows Username
+MOUNT_ROOT="$HOME/SMB"  # Where to mount shares
+# ---------------------
+
+# Ensure mount root exists
+mkdir -p "$MOUNT_ROOT"
+
+# Function to send notifications
+notify() {
+    notify-send "SMB Manager" "$1"
+}
+
+# --- UNMOUNT MODE ---
+if [[ "$1" == "-u" ]]; then
+    # List currently mounted shares inside our MOUNT_ROOT
+    # We look at /proc/mounts to find what is actually mounted
+    TARGET=$(mount | grep "$MOUNT_ROOT" | awk '{print $3}' | dmenu -i -p "Unmount Share:")
+
+    if [ -n "$TARGET" ]; then
+        if sudo umount "$TARGET"; then
+            notify "Successfully unmounted: $(basename "$TARGET")"
+            # Optional: Remove the empty directory
+            rmdir "$TARGET" 2>/dev/null
+        else
+            notify "Error: Could not unmount $(basename "$TARGET")"
+        fi
+    fi
+    exit 0
+fi
+
+# --- MOUNT MODE ---
+
+# 1. Get Password (echo prevents password from showing in process list briefly)
+# Note: dmenu shows input. For hidden input, install 'dmenu-password' or similar patch.
+# For now, we assume standard dmenu.
+WIN_PASS=$(echo "" | dmenu -p "Enter Windows Password:")
+
+[ -z "$WIN_PASS" ] && exit 1
+
+# 2. List Shares
+# We use smbclient to list, grep for 'Disk' (actual folders), and awk to clean up names
+SHARES=$(smbclient -L //$WIN_IP -U "$WIN_USER%$WIN_PASS" -g 2>/dev/null | grep 'Disk|' | cut -d'|' -f2)
+
+if [ -z "$SHARES" ]; then
+    notify "Connection failed or no shares found."
+    exit 1
+fi
+
+# 3. Select Share via Dmenu
+SELECTED_SHARE=$(echo "$SHARES" | dmenu -i -p "Select Share to Mount:")
+
+[ -z "$SELECTED_SHARE" ] && exit 1
+
+# 4. Mount Logic
+MOUNT_POINT="$MOUNT_ROOT/$SELECTED_SHARE"
+mkdir -p "$MOUNT_POINT"
+
+# We use uid/gid so the mounted files belong to YOU, not root.
+UID_VAL=$(id -u)
+GID_VAL=$(id -g)
+
+if sudo mount -t cifs "//$WIN_IP/$SELECTED_SHARE" "$MOUNT_POINT" \
+    -o "username=$WIN_USER,password=$WIN_PASS,uid=$UID_VAL,gid=$GID_VAL,iocharset=utf8"; then
+
+    notify "Mounted $SELECTED_SHARE successfully."
+else
+    notify "Failed to mount $SELECTED_SHARE."
+    rmdir "$MOUNT_POINT" 2>/dev/null
+fi
