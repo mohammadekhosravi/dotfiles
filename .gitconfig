@@ -7,7 +7,3 @@
 	email = mohammadekhosravi@yahoo.com
 [init]
 	defaultBranch = master
-[http]
-	proxy = socks5h://127.0.0.1:20170
-[https]
-	proxy = socks5h://127.0.0.1:20170
