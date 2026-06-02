@@ -35,9 +35,9 @@ keymap("n", "<C-j>", "<C-w>j", vim.tbl_deep_extend("force", opts, { desc = "Navi
 keymap("n", "<C-k>", "<C-w>k", vim.tbl_deep_extend("force", opts, { desc = "Navigate to top window" }))
 keymap("n", "<C-l>", "<C-w>l", vim.tbl_deep_extend("force", opts, { desc = "Navigate to right window" }))
 
--- Buffers Navigation
-keymap("n", "<S-l>", ":bnext<CR>", vim.tbl_deep_extend("force", opts, { desc = "Navigate to next buffer" }))
-keymap("n", "<S-h>", ":bprevious<CR>", vim.tbl_deep_extend("force", opts, { desc = "Navigate to previous buffer" }))
+-- Buffers Navigation (replace with bufferline commands)
+-- keymap("n", "<S-l>", ":bnext<CR>", vim.tbl_deep_extend("force", opts, { desc = "Navigate to next buffer" }))
+-- keymap("n", "<S-h>", ":bprevious<CR>", vim.tbl_deep_extend("force", opts, { desc = "Navigate to previous buffer" }))
 
 -- Resize windows with CTRL + arrow keys
 keymap("n", "<C-Up>", ":resize +2<CR>", opts)
@@ -68,55 +68,55 @@ keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
 
 -- Quickfix List
 keymap(
-  "n",
-  "<M-j>",
-  "<cmd>cnext<cr>",
-  vim.tbl_deep_extend("force", opts, { desc = "Go to next item in quickfix list" })
+	"n",
+	"<M-j>",
+	"<cmd>cnext<cr>",
+	vim.tbl_deep_extend("force", opts, { desc = "Go to next item in quickfix list" })
 )
 keymap(
-  "n",
-  "<M-k>",
-  "<cmd>cprev<cr>",
-  vim.tbl_deep_extend("force", opts, { desc = "Go to previous item in quickfix list" })
+	"n",
+	"<M-k>",
+	"<cmd>cprev<cr>",
+	vim.tbl_deep_extend("force", opts, { desc = "Go to previous item in quickfix list" })
 )
 
 -- Builtin Terminal
 keymap("n", "<leader>st", function()
-  vim.cmd.vnew()
-  vim.cmd.term()
-  vim.cmd.wincmd("J")
-  vim.api.nvim_win_set_height(0, 8)
-  vim.cmd.normal("A")
+	vim.cmd.vnew()
+	vim.cmd.term()
+	vim.cmd.wincmd("J")
+	vim.api.nvim_win_set_height(0, 8)
+	vim.cmd.normal("A")
 end, vim.tbl_deep_extend("force", opts, { desc = "Open builtin terminal" }))
 keymap(
-  "t",
-  "<Esc><Esc>",
-  "<C-\\><C-N>",
-  vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to left window" })
+	"t",
+	"<Esc><Esc>",
+	"<C-\\><C-N>",
+	vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to left window" })
 )
 keymap(
-  "t",
-  "<C-h>",
-  "<C-\\><C-N><C-w>h",
-  vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to left window" })
+	"t",
+	"<C-h>",
+	"<C-\\><C-N><C-w>h",
+	vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to left window" })
 )
 keymap(
-  "t",
-  "<C-j>",
-  "<C-\\><C-N><C-w>j",
-  vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to bottom window" })
+	"t",
+	"<C-j>",
+	"<C-\\><C-N><C-w>j",
+	vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to bottom window" })
 )
 keymap(
-  "t",
-  "<C-k>",
-  "<C-\\><C-N><C-w>k",
-  vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to top window" })
+	"t",
+	"<C-k>",
+	"<C-\\><C-N><C-w>k",
+	vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to top window" })
 )
 keymap(
-  "t",
-  "<C-l>",
-  "<C-\\><C-N><C-w>l",
-  vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to right window" })
+	"t",
+	"<C-l>",
+	"<C-\\><C-N><C-w>l",
+	vim.tbl_deep_extend("force", term_opts, { desc = "Navigate from terminal to right window" })
 )
 
 -- execute config
