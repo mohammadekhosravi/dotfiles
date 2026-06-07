@@ -2,11 +2,15 @@
 
 sleep 1
 OUTPUT=$(xrandr | grep " connected" | awk '{print $1}')
-MODE="2560x1440_120.00"
+# Use a fractional rate to break the LCD inversion sync
+MODE="2560x1440_119.90"
 
-# 2560×1440 at 120 Hz modeline calculated via cvt 2560 1440 120
 if ! xrandr | grep -q "$MODE"; then
-    xrandr --newmode "$MODE" 1089.00 2560 2760 3040 3520 1440 1443 1448 1500 -hsync +vsync
+    # Dynamically calculate the modeline for 119.90Hz and extract the parameters
+    MODELINE=$(cvt 2560 1440 119.90 | grep Modeline | cut -d' ' -f3-)
+
+    # We use 'eval' or unquoted variable expansion to pass the parameters correctly to xrandr
+    xrandr --newmode "$MODE" $MODELINE
     xrandr --addmode "$OUTPUT" "$MODE"
 fi
 
