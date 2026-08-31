@@ -32,6 +32,7 @@ return {
 			"html",
 			"htmldjango",
 			"javascript",
+			"jsx",
 			"jq",
 			"jsdoc",
 			"json",
