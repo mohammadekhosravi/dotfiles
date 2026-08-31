@@ -52,7 +52,6 @@ return {
 			trigger = {
 				show_on_trigger_character = true,
 				show_on_blocked_trigger_characters = { " ", "\n", "\t" },
-				show_in_snippet = true,
 			},
 
 			-- IMPORTANT: This makes auto-imports work!
@@ -70,7 +69,7 @@ return {
 		},
 
 		sources = {
-			default = { "lsp", "path", "snippets", "buffer" },
+			default = { "lsp", "path", "buffer" },
 			providers = {
 				lsp = {
 					score_offset = 100,
@@ -80,9 +79,6 @@ return {
 					score_offset = -100,
 					min_keyword_length = 4,
 					max_items = 5,
-				},
-				snippets = {
-					score_offset = 90,
 				},
 				path = {
 					score_offset = 95,

@@ -91,6 +91,21 @@ return {
 			end,
 		})
 
+		-- prettierd is a long-running daemon that caches the resolved prettier
+		-- instance per config. Restart it whenever a prettier config changes so
+		-- format-on-save never silently keeps a stale config.
+		vim.api.nvim_create_autocmd("BufWritePost", {
+			group = vim.api.nvim_create_augroup("PrettierdRestartOnConfigChange", { clear = true }),
+			pattern = { ".prettierrc*", "prettier.config.*" },
+			callback = function()
+				require("fidget").notify("Restarting prettierd (config changed)", nil, {
+					key = "format",
+					ttl = 2,
+				})
+				vim.system({ "prettierd", "restart" })
+			end,
+		})
+
 		-- Manual format keymap with notification
 		vim.keymap.set({ "n", "v" }, "<leader>mp", function()
 			format_with_notify(vim.api.nvim_get_current_buf(), true) -- async = true for keymap

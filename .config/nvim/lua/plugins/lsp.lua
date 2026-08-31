@@ -136,6 +136,34 @@ return {
 				}
 			end
 
+			if name == "tailwindcss" then
+				opts.settings = {
+					tailwindCSS = {
+						-- Recognize Mantine's `classNames` prop in addition to the
+						-- default class/className/classList/ngClass/class:list.
+						classAttributes = {
+							"class",
+							"className",
+							"classNames",
+							"classList",
+							"class:list",
+							"ngClass",
+						},
+						experimental = {
+							-- Resolve classes inside `classNames={{ key: '...' }}`
+							-- object values. Outer regex: capture the object body.
+							-- Inner regex: capture each quoted class string.
+							classRegex = {
+								{
+									"classNames\\s*=\\s*\\{\\s*\\{([\\s\\S]*?)\\}\\s*\\}",
+									"[\"'`]([^\"'`]*)[\"'`]",
+								},
+							},
+						},
+					},
+				}
+			end
+
 			vim.lsp.config(name, opts)
 			vim.lsp.enable(name)
 		end
