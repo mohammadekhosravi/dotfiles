@@ -66,17 +66,16 @@ return {
 					args = { "-", "--reformat", "--indent", "2" },
 					stdin = true,
 				},
-			},
-			-- SHFMT CONFIGURATION
-			shfmt = {
-				-- -i 4 : Indent with 4 spaces
-				-- -bn  : Binary operators (like && or |) start a new line
-				-- -ci  : Switch cases are indented
-				prepend_args = { "-i", "4", "-bn", "-ci" },
-			},
-
-			["clang-format"] = {
-				prepend_args = { "-style=file", "--fallback-style=LLVM" },
+				-- SHFMT CONFIGURATION
+				shfmt = {
+					-- -i 4 : Indent with 4 spaces
+					-- -bn  : Binary operators (like && or |) start a new line
+					-- -ci  : Switch cases are indented
+					prepend_args = { "-i", "4", "-bn", "-ci" },
+				},
+				["clang-format"] = {
+					prepend_args = { "-style=file", "--fallback-style=LLVM" },
+				},
 			},
 		})
 

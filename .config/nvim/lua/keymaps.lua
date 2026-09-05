@@ -121,4 +121,12 @@ keymap(
 
 -- execute config
 keymap("n", "<space><space>x", "<cmd>source %<CR>", { desc = "Source current buffer" })
-keymap("v", "<space><space>x", ":lua<CR>", { desc = "Source highlighted segment" })
+keymap("v", "<space><space>x", function()
+  local lines = vim.api.nvim_buf_get_lines(0, vim.fn.getpos("'<")[2] - 1, vim.fn.getpos("'>")[2], false)
+  local chunk, err = load(table.concat(lines, "\n"))
+  if chunk then
+    chunk()
+  else
+    vim.notify("Failed to load selection: " .. tostring(err), vim.log.levels.ERROR)
+  end
+end, { desc = "Source highlighted segment" })

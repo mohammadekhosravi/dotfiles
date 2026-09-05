@@ -179,25 +179,5 @@ return {
     vim.opt.wildmenu = true
     vim.opt.wildmode = "longest:full,full"
     vim.opt.wildoptions = "pum"
-
-    -- ═════════════════════════════════════════════════════════════════════
-    -- DIAGNOSTICS (floating + gutter polish)
-    -- ═════════════════════════════════════════════════════════════════════
-    vim.diagnostic.config({
-      virtual_text = {
-        prefix = "●", -- small dot next to the message
-      },
-      float = {
-        border = "rounded",
-      },
-      signs = {
-        text = {
-          [vim.diagnostic.severity.ERROR] = "✘",
-          [vim.diagnostic.severity.WARN] = "▲",
-          [vim.diagnostic.severity.INFO] = "ℹ",
-          [vim.diagnostic.severity.HINT] = "ℹ",
-        },
-      },
-    })
   end,
 }

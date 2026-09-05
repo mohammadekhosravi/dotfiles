@@ -12,7 +12,7 @@ local function create_floating_window(opts)
 
   -- Calculate the position to center the window
   local col = math.floor((vim.o.columns - width) / 2)
-  local row = math.floor((vim.o.columns - height) / 2)
+  local row = math.floor((vim.o.lines - height) / 2)
 
   -- Create a buffer
   local buf = nil
@@ -51,6 +51,6 @@ local toggle_terminal = function()
   end
 end
 
-vim.api.nvim_create_user_command("Flotermainal", toggle_terminal, {})
+vim.api.nvim_create_user_command("Floterminal", toggle_terminal, {})
 
 vim.keymap.set({ "n", "t" }, "<leader>sf", toggle_terminal, { desc = "Open Floating Terminal" })
