@@ -1,0 +1,170 @@
+/* Page palettes. github-markdown-css reads these variables, so a theme is just
+   an override set; the matching highlight.js stylesheet is served under the
+   same hljs path. Applied by md-preview/server.mjs. */
+html[data-theme='github-light'],
+html[data-theme='github-light'] .markdown-body {
+  color-scheme: light;
+  --bgColor-default: #ffffff;
+  --fgColor-default: #1f2328;
+  --fgColor-muted: #59636e;
+  --bgColor-muted: #f6f8fa;
+  --bgColor-neutral-muted: #818b981f;
+  --borderColor-default: #d1d9e0;
+  --borderColor-muted: #d1d9e0b3;
+  --borderColor-neutral-muted: #d1d9e0b3;
+  --fgColor-accent: #0969da;
+}
+
+html[data-theme='github-dark'],
+html[data-theme='github-dark'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #0d1117;
+  --fgColor-default: #e6edf3;
+  --fgColor-muted: #9198a1;
+  --bgColor-muted: #151b23;
+  --bgColor-neutral-muted: #656c7633;
+  --borderColor-default: #3d444d;
+  --borderColor-muted: #3d444db3;
+  --borderColor-neutral-muted: #3d444d;
+  --fgColor-accent: #4493f8;
+}
+
+html[data-theme='github-dimmed'],
+html[data-theme='github-dimmed'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #22272e;
+  --fgColor-default: #adbac7;
+  --fgColor-muted: #768390;
+  --bgColor-muted: #2d333b;
+  --bgColor-neutral-muted: #636e7b1f;
+  --borderColor-default: #444c56;
+  --borderColor-muted: #444c56b3;
+  --borderColor-neutral-muted: #444c56;
+  --fgColor-accent: #539bf5;
+}
+
+html[data-theme='one-dark'],
+html[data-theme='one-dark'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #282c34;
+  --fgColor-default: #abb2bf;
+  --fgColor-muted: #7f848e;
+  --bgColor-muted: #21252b;
+  --bgColor-neutral-muted: #3e445166;
+  --borderColor-default: #3b4048;
+  --borderColor-muted: #3b4048b3;
+  --borderColor-neutral-muted: #3e4451;
+  --fgColor-accent: #61afef;
+}
+
+html[data-theme='one-light'],
+html[data-theme='one-light'] .markdown-body {
+  color-scheme: light;
+  --bgColor-default: #fafafa;
+  --fgColor-default: #383a42;
+  --fgColor-muted: #a0a1a7;
+  --bgColor-muted: #f0f0f0;
+  --bgColor-neutral-muted: #e5e5e64d;
+  --borderColor-default: #e0e0e1;
+  --borderColor-muted: #e0e0e1b3;
+  --borderColor-neutral-muted: #d8d8d9;
+  --fgColor-accent: #4078f2;
+}
+
+html[data-theme='dracula'],
+html[data-theme='dracula'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #282a36;
+  --fgColor-default: #f8f8f2;
+  --fgColor-muted: #6272a4;
+  --bgColor-muted: #21222c;
+  --bgColor-neutral-muted: #44475a80;
+  --borderColor-default: #44475a;
+  --borderColor-muted: #44475ab3;
+  --borderColor-neutral-muted: #44475a;
+  --fgColor-accent: #bd93f9;
+}
+
+html[data-theme='nord'],
+html[data-theme='nord'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #2e3440;
+  --fgColor-default: #d8dee9;
+  --fgColor-muted: #7b88a1;
+  --bgColor-muted: #3b4252;
+  --bgColor-neutral-muted: #4c566a66;
+  --borderColor-default: #4c566a;
+  --borderColor-muted: #4c566ab3;
+  --borderColor-neutral-muted: #4c566a;
+  --fgColor-accent: #88c0d0;
+}
+
+html[data-theme='gruvbox-dark'],
+html[data-theme='gruvbox-dark'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #282828;
+  --fgColor-default: #ebdbb2;
+  --fgColor-muted: #a89984;
+  --bgColor-muted: #3c3836;
+  --bgColor-neutral-muted: #50494580;
+  --borderColor-default: #504945;
+  --borderColor-muted: #504945b3;
+  --borderColor-neutral-muted: #504945;
+  --fgColor-accent: #83a598;
+}
+
+html[data-theme='monokai'],
+html[data-theme='monokai'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #272822;
+  --fgColor-default: #f8f8f2;
+  --fgColor-muted: #90908a;
+  --bgColor-muted: #3e3d32;
+  --bgColor-neutral-muted: #49483e80;
+  --borderColor-default: #49483e;
+  --borderColor-muted: #49483eb3;
+  --borderColor-neutral-muted: #49483e;
+  --fgColor-accent: #a6e22e;
+}
+
+html[data-theme='tokyo-night'],
+html[data-theme='tokyo-night'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #1a1b26;
+  --fgColor-default: #a9b1d6;
+  --fgColor-muted: #565f89;
+  --bgColor-muted: #16161e;
+  --bgColor-neutral-muted: #292e4280;
+  --borderColor-default: #292e42;
+  --borderColor-muted: #292e42b3;
+  --borderColor-neutral-muted: #292e42;
+  --fgColor-accent: #7aa2f7;
+}
+
+html[data-theme='night-owl'],
+html[data-theme='night-owl'] .markdown-body {
+  color-scheme: dark;
+  --bgColor-default: #011627;
+  --fgColor-default: #d6deeb;
+  --fgColor-muted: #5f7e97;
+  --bgColor-muted: #0b2942;
+  --bgColor-neutral-muted: #122d4280;
+  --borderColor-default: #122d42;
+  --borderColor-muted: #122d42b3;
+  --borderColor-neutral-muted: #122d42;
+  --fgColor-accent: #82aaff;
+}
+
+html[data-theme='comfort'],
+html[data-theme='comfort'] .markdown-body {
+  color-scheme: light;
+  --bgColor-default: #f7f1e3;
+  --fgColor-default: #3b3226;
+  --fgColor-muted: #7a6f5f;
+  --bgColor-muted: #efe7d5;
+  --bgColor-neutral-muted: #d9cfbc66;
+  --borderColor-default: #ded3bd;
+  --borderColor-muted: #ded3bdb3;
+  --borderColor-neutral-muted: #ded3bd;
+  --fgColor-accent: #a05b32;
+}

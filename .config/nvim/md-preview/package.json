@@ -1,0 +1,14 @@
+{
+  "name": "md-preview",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local markdown preview server for Neovim (:MarkdownPreview)",
+  "dependencies": {
+    "github-markdown-css": "^5.9.0",
+    "github-slugger": "^2.0.0",
+    "highlight.js": "^11.12.0",
+    "markdown-it": "^15.0.2",
+    "markdown-it-task-lists": "^2.1.1"
+  }
+}

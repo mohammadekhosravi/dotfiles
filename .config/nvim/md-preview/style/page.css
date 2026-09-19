@@ -1,0 +1,214 @@
+/* Page chrome, preview settings toolbar, contents panel and heading permalinks.
+   Colours come from the theme variables in themes.css. */
+
+body {
+  margin: 0;
+  background: var(--bgColor-default, #ffffff);
+  color: var(--fgColor-default, #1f2328);
+}
+
+.markdown-body {
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: var(--content-width, 980px);
+  margin: 0 auto;
+  padding: 45px;
+  /* github-markdown-css hardcodes 16px here, which is why scaling the root
+     font size alone only moved the spacing. */
+  font-size: var(--preview-font-size, 16px);
+}
+
+html[data-width='wide'] {
+  --content-width: 1400px;
+}
+
+/* Make room for the contents panel so it never covers the text. */
+html[data-toc='on'] body {
+  padding-left: 290px;
+}
+
+html[data-font='serif'] .markdown-body {
+  font-family: Georgia, 'Nimbus Roman', 'Times New Roman', serif;
+}
+
+@media (max-width: 767px) {
+  .markdown-body {
+    padding: 15px;
+  }
+}
+
+/* Heading permalinks, the way GitHub renders them. */
+.markdown-heading {
+  position: relative;
+}
+
+.markdown-heading .anchor {
+  position: absolute;
+  left: -22px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  color: var(--fgColor-muted, #59636e);
+  text-decoration: none;
+  opacity: 0;
+}
+
+.markdown-heading:hover .anchor,
+.markdown-heading .anchor:focus {
+  opacity: 1;
+}
+
+.markdown-heading .anchor .octicon {
+  fill: currentColor;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item input[type='checkbox'] {
+  margin: 0 0.2em 0.25em -1.4em;
+  vertical-align: middle;
+}
+
+.preview-closed {
+  margin-top: 25vh;
+  text-align: center;
+  color: var(--fgColor-muted, #59636e);
+  font-size: 16px;
+}
+
+/* Settings toolbar */
+.preview-toolbar {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+}
+
+.preview-fab {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--borderColor-default, #d1d9e0);
+  background: var(--bgColor-default, #fff);
+  color: var(--fgColor-default, #1f2328);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0.65;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 18%);
+}
+
+.preview-fab:hover,
+.preview-fab[aria-expanded='true'] {
+  opacity: 1;
+}
+
+.preview-panel {
+  width: 240px;
+  padding: 12px 14px;
+  border: 1px solid var(--borderColor-default, #d1d9e0);
+  border-radius: 10px;
+  background: var(--bgColor-default, #fff);
+  color: var(--fgColor-default, #1f2328);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 22%);
+}
+
+.preview-panel .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.preview-panel .row:last-of-type {
+  margin-bottom: 0;
+}
+
+.preview-panel .controls {
+  display: flex;
+  gap: 4px;
+}
+
+.preview-panel button,
+.preview-panel select {
+  padding: 4px 8px;
+  border: 1px solid var(--borderColor-default, #d1d9e0);
+  border-radius: 6px;
+  background: var(--bgColor-muted, #f6f8fa);
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.preview-panel button[aria-pressed='true'] {
+  border-color: var(--fgColor-accent, #0969da);
+  color: var(--fgColor-accent, #0969da);
+}
+
+.preview-panel .row.footer {
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+  margin-bottom: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--borderColor-muted, #d1d9e0b3);
+}
+
+.preview-panel .hint {
+  margin: 10px 0 0;
+  color: var(--fgColor-muted, #59636e);
+  font-size: 11px;
+}
+
+/* Contents panel */
+.preview-toc {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  bottom: 20px;
+  width: 250px;
+  overflow-y: auto;
+  padding: 14px;
+  border: 1px solid var(--borderColor-default, #d1d9e0);
+  border-radius: 10px;
+  background: var(--bgColor-default, #fff);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 18%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+}
+
+.preview-toc a {
+  display: block;
+  padding: 3px 0;
+  color: var(--fgColor-default, #1f2328);
+  text-decoration: none;
+}
+
+.preview-toc a:hover {
+  color: var(--fgColor-accent, #0969da);
+}
+
+.preview-toc a.toc-h3 {
+  padding-left: 14px;
+  color: var(--fgColor-muted, #59636e);
+}
+
+@media (max-width: 1200px) {
+  .preview-toc {
+    display: none;
+  }
+
+  html[data-toc='on'] body {
+    padding-left: 0;
+  }
+}
